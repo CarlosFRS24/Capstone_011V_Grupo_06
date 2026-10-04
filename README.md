@@ -1,109 +1,154 @@
-# 🚲 OmniDock: Plataforma Transaccional de Gestión de Micromovilidad
+# OmniDock
 
-![Estado del Proyecto](https://img.shields.io/badge/Estado-En_Desarrollo-blue)
-![Java](https://img.shields.io/badge/Backend-Java_Spring_Boot-orange)
-![Oracle](https://img.shields.io/badge/Base_de_Datos-Oracle_SQL-red)
-![Power BI](https://img.shields.io/badge/Analítica-Power_BI-yellow)
-![Metodología](https://img.shields.io/badge/Metodología-Scrum_Ágil-brightgreen)
+Plataforma para gestionar estacionamientos de bicicletas y scooters en las sedes de Duoc UC.
 
----
+Proyecto Capstone del **Equipo Nodalix** — Escuela de Informática y Telecomunicaciones, Duoc UC.
 
-## 1. Nombre del Proyecto
-**OmniDock: Plataforma Transaccional de Gestión de Micromovilidad**
-*Desarrollado por **Equipo Nodalix** — Escuela de Informática y Telecomunicaciones, Duoc UC.*
+## Qué es
 
----
+Hoy los bicicleteros no tienen ningún control: no se sabe si hay espacio, ni quién dejó qué. OmniDock propone que cada rack se pueda reservar y abrir desde el celular, y que la institución vea lo que pasa.
 
-## 2. Descripción
-**OmniDock** es una plataforma SaaS transaccional e *IoT-ready* diseñada para modernizar, automatizar y asegurar el control de accesos y la asignación de estacionamientos de bicicletas y scooters dentro de las sedes institucionales de Duoc UC.
+- **App móvil:** el usuario entra con su cuenta institucional, registra su bicicleta o scooter, ve las bahías disponibles, reserva una (la reserva dura 15 minutos) y abre o cierra su sesión escaneando el código QR del rack.
+- **Panel web:** el administrador ve el estado de cada bahía (disponible, reservada, ocupada o fuera de servicio), gestiona usuarios y permisos, y maneja los tickets de mantención.
+- **Simulador IoT:** como no tenemos el hardware real, un simulador hace de candado: recibe las órdenes de abrir y cerrar y envía el estado del rack.
+- **Power BI:** los datos de uso se muestran en tableros para ver ocupación, horas punta y fallas.
 
-El sistema transforma la infraestructura pasiva (bicicleteros tradicionales) en puntos de control activos mediante una arquitectura omnicanal sustentada en una **Fuente Única de Verdad (*Single Source of Truth*)** en Oracle SQL:
-* **Autogestión en Terreno (App Móvil):** Permite a estudiantes, docentes y funcionarios autenticarse con sus credenciales institucionales, registrar sus vehículos personales, consultar disponibilidad de bahías por sector en tiempo real, realizar una **reserva previa obligatoria** (ventana de 15 minutos) e iniciar o finalizar su sesión de estacionamiento (*Check-in / Check-out*) mediante lectura de códigos QR/NFC.
-* **Control Operativo y Administración (Panel Web Admin):** Permite a los administradores monitorear el estado operativo de los racks en tiempo real (`DISPONIBLE`, `OCUPADA`, `MANTENCION`), gestionar usuarios y permisos bajo control de acceso basado en roles (**RBAC**), y administrar tickets de mantenimiento técnico ante fallas de hardware.
-* **Simulación Bidireccional IoT (Mocking):** Emula la comunicación con los microcontroladores físicos de los racks para el envío de comandos de apertura/cierre (`LIBERAR_CERROJO`) y la ingesta de telemetría JSON (estado del candado, batería y conexión).
-* **Inteligencia de Negocios (BI):** Procesa el historial transaccional inmutable mediante consultas analíticas (ETL) para alimentar dashboards directivos embebidos en **Microsoft Power BI**, reduciendo tiempos de búsqueda, eliminando reclamos por robos y optimizando el presupuesto de infraestructura.
+## Estado del proyecto (al 05/10/2026)
 
----
+| Parte | Estado |
+| --- | --- |
+| Base de datos Oracle | Lista (Sprint 2) |
+| Backend y simulador IoT | Listos y probados (Sprint 2) |
+| Diseño de pantallas en Figma | Listo (Sprint 2) |
+| App móvil y panel web | En desarrollo (Sprint 3). Lo que hay en `frontend/` es un borrador inicial |
+| Tableros en Power BI | Pendiente (Sprint 4). Las vistas de la base ya están creadas |
 
-## 3. Tecnologías Utilizadas
+## Tecnologías
 
-| Capa / Ámbito | Tecnologías y Herramientas | Propósito en el Proyecto |
-| :--- | :--- | :--- |
-| **Base de Datos (OLTP)** | **Oracle Database (19c / 21c)**, Oracle SQL Developer, Data Modeler | Persistencia relacional en 3FN con propiedades ACID, claves `GENERATED ALWAYS AS IDENTITY`, integridad referencial y borrado lógico. |
-| **Backend & Seguridad** | **Java (JDK 17+)**, Spring Boot 3, Spring Security, **JWT**, Maven, JDBC/JPA | Lógica de negocio, exposición de contratos API RESTful (`/api/v1/...`), validación de reservas y seguridad por roles (RBAC). |
-| **Simulación IoT (Mock)** | **Servidor Mock REST (JSON)**, Postman | Simulación de microcontroladores de racks para recepción de comandos e ingesta de eventos de telemetría. |
-| **Frontend & UI/UX** | **HTML5, CSS3, JavaScript (Web & App Móvil)**, Figma | Diseño de prototipos e interfaces responsivas para el usuario final y el panel administrativo. |
-| **Analítica y BI (OLAP)** | **Microsoft Power BI**, Vistas SQL Analíticas (ETL) | Construcción del modelo dimensional y dashboards embebidos de ocupación, rotación y fallas. |
-| **Infraestructura & Gestión** | **Microsoft Azure** (Capa Académica), **Git / GitHub**, **Jira** | Entorno cloud proyectado, control de versiones distribuido y gestión de backlog bajo Scrum. |
+| Parte | Con qué está hecha |
+| --- | --- |
+| Base de datos | Oracle Autonomous Database, en Oracle Cloud |
+| Backend | Java 17, Spring Boot 3, Spring Security con JWT, Maven y Swagger |
+| Simulador IoT | Va dentro del backend y se activa con el perfil `mock` |
+| App y panel web | Ionic 8, Angular 18 y Capacitor, en un mismo proyecto |
+| Reportes | Power BI, sobre vistas SQL de la base |
+| Gestión | Jira para las tareas, GitHub para el código y Figma para el diseño |
 
----
+## Carpetas
 
-## 4. Ejecución Local Paso a Paso
+| Carpeta | Qué tiene |
+| --- | --- |
+| `backend/` | API REST en Spring Boot, con el simulador IoT |
+| `frontend/` | App móvil y panel web en Ionic |
+| `database/` | Scripts de Oracle para crear la base, cargar datos de prueba y revisarlos |
+| `docs/arquitectura/` | ERS, DAS y diagramas UML |
+| `docs/sprint-0/` a `docs/sprint-4/` | Un README por sprint: qué hicimos, quién, entregables, pruebas y retrospectiva |
+| `docs/Evidencias Proyecto/` | Visión del producto, backlogs y definición de terminado |
+| `docs/qa/` | Registro detallado de las pruebas |
 
-Sigue estos **8 pasos en orden estricto** para desplegar y probar el proyecto completo en tu entorno local:
+## Cómo levantar el proyecto
 
-### Prerrequisitos del Sistema
-* **Oracle Database XE (19c o 21c)** instalado localmente (o acceso a instancia Oracle Cloud) y **Oracle SQL Developer**.
-* **Java Development Kit (JDK 17 o superior)** y **Apache Maven 3.8+**.
-* **Node.js (v18+)** (para ejecución de interfaces frontend).
-* **Git**, **Postman** (para pruebas de API) y **Microsoft Power BI Desktop**.
+### Qué se necesita
 
----
-### ...en construcción...
-### Paso 1: Clonar el repositorio y verificar estructura
-1. Abre una terminal y clona el repositorio oficial:
-   `git clone https://github.com/equipo-nodalix/omnidock.git`
-2. Ingresa a la carpeta raíz del proyecto:
-   `cd omnidock`
-3. Verifica que estén presentes los directorios `/database`, `/backend`, `/frontend`, `/iot-mock` y `/docs`.
+- Acceso a la base Oracle del proyecto (con la carpeta `wallet/`, que no se sube al repositorio) o un Oracle XE local (19c o 21c), y Oracle SQL Developer.
+- JDK 17 o superior y Maven 3.8 o superior.
+- Node.js 18 o superior e Ionic CLI (`npm i -g @ionic/cli`).
+- Git y, para los reportes, Power BI Desktop.
 
----
-## 5. Integrantes y Roles
+### 1. Clonar el repositorio
 
-El proyecto es desarrollado por el **Equipo Nodalix**, con una dedicación estimada de **900 Horas-Hombre (300 HH por integrante)** y un presupuesto CAPEX valorizado en **$18.600.000 CLP**:
+```bash
+git clone https://github.com/CarlosFRS24/Capstone_011V_Grupo_06.git
+cd Capstone_011V_Grupo_06
+```
 
-| Nombre Integrante | Rol Definido | Responsabilidades Específicas |
-| :--- | :--- | :--- |
-| **Carlos Román** | **Líder de Proyecto (Scrum Master) / Desarrollador Frontend y UI/UX** | Gestión del Product Backlog en Jira, planificación de Sprints, diseño de prototipos en Figma y construcción de las interfaces de usuario (App Móvil y Panel Web Admin). |
-| **Crisler Romero** | **Arquitectura de Datos, Business Intelligence (BI)** | Diseño y normalización del modelo relacional en Oracle SQL (DDL/DML), reglas de integridad e inmutabilidad (borrado lógico, reserva obligatoria), diccionario de datos y pipeline ETL hacia Power BI. |
-| **Felipe Vidal** | **Desarrollador Backend e Integración de APIs / IoT** | Construcción de la API RESTful en Java Spring Boot, implementación de seguridad JWT y RBAC, especificación de contratos API v1 y desarrollo de los simuladores de hardware IoT (Mocks). |
+### 2. Crear la base de datos
 
----
+Con el backend detenido, ejecutar los scripts en este orden:
 
-## 6. Metodología de Trabajo
+1. `database/00_drop.sql`: borra las 11 tablas y sus datos. Si alguna no existe, ese error se ignora.
+2. `database/01_ddl.sql`: crea las 11 tablas con sus restricciones.
+3. `database/02_insert.sql`: carga los catálogos y los datos de prueba (20 usuarios, 4 bahías, vehículos, reservas y usos). Siempre sobre tablas recién creadas.
+4. `database/03_verificar.sql`: consultas para revisar que todo quedó bien cargado.
 
-El desarrollo se rige bajo una **Metodología Ágil (Scrum Adaptado)**, seleccionada estratégicamente para gestionar de forma incremental la integración entre el software transaccional y el hardware simulado:
+Para Power BI, aparte:
 
-* **Gestión del Backlog:** Administración de tareas mediante tableros Kanban/Scrum en **Jira**, documentando **11 Historias de Usuario (HU-01 a HU-11)** con criterios de aceptación bajo estándar *Gherkin (Dado / Cuando / Entonces)*.
-* **Control de Cambios:** Priorización iterativa al inicio de cada Sprint, blindando el modelo relacional base en las primeras iteraciones para evitar refactorizaciones costosas.
-* **Ciclo de Vida en 4 Sprints:**
-  * **Sprint 1 — Fundamentos y Especificación (ERS):** Levantamiento de requerimientos bajo estándar IEEE 830, diseño conceptual/lógico de base de datos, definición de contratos API v1 y prototipado UI/UX.
-  * **Sprint 2 — Core Backend, Seguridad y Estructuración de Datos (DAS):** Construcción física de las 11 tablas en Oracle SQL, scripts DML de prueba con integridad referencial, implementación de CRUD y autenticación JWT en Java, y elaboración del Documento de Arquitectura de Software (Modelo 4+1 Ágil).
-  * **Sprint 3 — Integración IoT y Acoplamiento UI:** Conexión bidireccional entre la API Java y los simuladores de hardware IoT (Mocks), e integración de pantallas de la App Móvil y Web Admin.
-  * **Sprint 4 — Analítica BI, Pruebas QA y Cierre:** Despliegue del pipeline ETL hacia Microsoft Power BI, embebimiento de reportes, pruebas de concurrencia/ACID y empaquetado final.
+5. `database/04_vistas_bi.sql`: crea las 8 vistas para los reportes. `00_drop.sql` no las borra.
+6. `database/05_consultas_bi.sql`: consultas de ejemplo sobre esas vistas (ocupación, horas punta, permanencia, reservas y mantención).
 
----
+> Los estados de bahía tienen ID fijo: 1 `DISPONIBLE`, 2 `RESERVADA`, 3 `OCUPADA` y 4 `FUERA_DE_SERVICIO`. Si se cambian, hay que actualizar `domain/Estados.java` en el backend.
 
-## 7. Arquitectura del Sistema
+### 3. Configurar el backend
 
-La arquitectura de **OmniDock** se estructura bajo el estándar **Modelo de Vistas 4+1 de Kruchten adaptado a Scrum**, garantizando trazabilidad total con el ERS v1.1.0:
+```bash
+# Oracle Cloud (alias del wallet):
+export DB_URL="jdbc:oracle:thin:@omnidock_high?TNS_ADMIN=/ruta/a/wallet"
+# u Oracle XE local:
+export DB_URL=jdbc:oracle:thin:@//localhost:1521/XEPDB1
+export DB_USER=<usuario> DB_PASSWORD=<clave>
+```
 
-### 7.1. Las 5 Vistas Arquitectónicas
-1. **Vista de Escenarios (+1):** Compuesta por las **11 Historias de Usuario** divididas en tres flujos: *Autogestión en App Móvil* (HU-01, HU-02, HU-06, HU-07, HU-08), *Administración y Monitoreo Web* (HU-09, HU-10, HU-11) y *Core IoT, Auditoría y BI* (HU-03, HU-04, HU-05).
-2. **Vista Lógica:** Sistema estructurado en 4 bloques desacoplados bajo el principio de *Single Source of Truth*:
-   * **Capa de Presentación Omnicanal:** App Móvil (ciclistas) y Panel Web Admin con Power BI Embedded.
-   * **Capa de Negocio (Backend Java):** API RESTful MVC asegurada con tokens JWT y control RBAC.
-   * **Capa de Simulación IoT:** Servicio Mock que emula cerraduras electromagnéticas y sensores de bahía.
-   * **Capa de Datos y Analítica:** Motor transaccional **Oracle SQL (OLTP)** + **Microsoft Power BI (OLAP)**.
-3. **Vista de Procesos:** Implementa el flujo transaccional de **Reserva Obligatoria y Check-in**:
-   * El usuario consulta bahías disponibles compatibles con su tipo de vehículo (`BICICLETA` o `SCOOTER`) -> Genera una reserva temporal de 15 minutos (`PENDIENTE`) -> Escanea el QR en terreno -> El Backend valida la reserva en Oracle, ordena al Mock IoT abrir el candado (`LIBERAR_CERROJO`) e inicia la sesión en `TRANSACCION_USO` (`ACTIVA`).
-4. **Vista de Desarrollo (Modelo de Datos en 3FN):**
-   * **11 Tablas en Oracle SQL:** `ROL`, `TIPO_VEHICULO`, `ESTADO_BAHIA`, `USUARIO`, `VEHICULO`, `BAHIA`, `RESERVA`, `TRANSACCION_USO`, `DISPOSITIVO_IOT`, `LOG_EVENTO_IOT` y `TICKET_MANTENIMIENTO`.
-   * **Reglas de Integridad e Inmutabilidad (RF-04):** Prohibición de `DELETE` físico en tablas operativas mediante **Borrado Lógico** (`ESTADO_VEHICULO = 'INACTIVO'`, `USUARIO = 'INACTIVO'`) para proteger las llaves foráneas históricas requeridas por Power BI.
-5. **Vista Física (Despliegue):** Clientes móviles y navegadores web conectados por HTTPS a los servicios de aplicación y base de datos proyectados sobre infraestructura académica en **Microsoft Azure** y **Oracle Database**, integrados con el servicio cloud de **Microsoft Power BI**.
+También se puede editar `backend/src/main/resources/application.yml`. Son opcionales `JWT_SECRET`, `RESERVA_MINUTOS` (15 por defecto) y las variables `PBI_*` de Power BI.
 
-### 7.2. Impacto y Propuesta de Valor al Negocio
-* **-80% en tiempos de búsqueda de estacionamiento:** Reducción de 8-12 minutos a menos de 2 minutos mediante consulta de disponibilidad por sector y reserva asegurada de 15 minutos.
-* **100% de trazabilidad y -90% en reclamos:** Registro inmutable que cruza `ID_USUARIO + ID_VEHICULO + ID_RESERVA + ID_BAHIA` con sellos `TIMESTAMP` exactos de entrada y salida.
-* **-65% en tiempo de inactividad de racks (Downtime):** Bloqueo automático de bahías a estado `MANTENCION` al abrirse un `TICKET_MANTENIMIENTO` o recibirse una alerta de falla desde la telemetría IoT.
-* **Optimización del CAPEX ($18.600.000 CLP):** Decisiones de expansión basadas en métricas reales de rotación horaria y demanda por tipo de vehículo en Power BI.
+### 4. Levantar el backend
+
+```bash
+cd backend
+JPA_DDL=validate mvn spring-boot:run -Dspring-boot.run.profiles=mock   # la primera vez: revisa que las entidades calcen con la base
+mvn spring-boot:run -Dspring-boot.run.profiles=mock                    # uso normal
+```
+
+La API queda en `http://localhost:8080` y la documentación Swagger en `http://localhost:8080/swagger-ui.html`.
+
+### 5. Probar la API
+
+Los usuarios de prueba están en `database/02_insert.sql`; por ejemplo, el administrador `csoto@duocuc.cl` y el usuario `mmunoz@duocuc.cl`. El flujo completo (login, reserva, check-in, check-out, historial y falla simulada) está con ejemplos en `backend/README.md`.
+
+Para correr todas las pruebas de la API de una vez, ver `backend/pruebas/README.md`.
+
+### 6. Frontend (en desarrollo)
+
+La app y el panel web se están construyendo en el Sprint 3. Para levantar lo que hay hoy:
+
+```bash
+cd frontend
+npm install
+npm start          # http://localhost:8100
+```
+
+- La dirección del backend se define en `frontend/src/environments/environment.ts` (por defecto `http://localhost:8080/api/v1`; en un emulador Android se usa `http://10.0.2.2:8080/api/v1`).
+- El administrador entra al panel web (`/admin`) y el usuario final a la app (`/app`).
+- En el navegador no hay cámara, así que el check-in pide escribir el código del rack (por ejemplo `RACK-BICI-01`). En el celular se escanea el QR.
+
+### 7. Power BI (pendiente, Sprint 4)
+
+La forma simple es publicar el reporte y definir la variable `PBI_EMBED_URL`; el backend la entrega en `GET /api/v1/analitica/embed-token`. La forma completa usa `PBI_MODO=embedded` con las credenciales de la aplicación registrada en Microsoft Entra ID (`PBI_TENANT_ID`, `PBI_CLIENT_ID`, `PBI_CLIENT_SECRET`, `PBI_WORKSPACE_ID` y `PBI_REPORT_ID`).
+
+## Integrantes
+
+| Integrante | Rol | Qué hace |
+| --- | --- | --- |
+| Carlos Román | Líder del proyecto y diseño (UI/UX) | Lleva el backlog en Jira, planifica los sprints, diseña en Figma y construye la app y el panel web |
+| Crisler Romero | Arquitectura de datos y BI | Diseña el modelo de datos en Oracle, los scripts, las reglas de integridad y las vistas para Power BI |
+| Felipe Vidal | Backend e integración IoT | Programa la API en Spring Boot, la seguridad con JWT, los contratos de la API y el simulador IoT |
+
+## Cómo trabajamos
+
+Partimos en cascada y el 09/09/2026 cambiamos a metodología ágil. Trabajamos en sprints de dos semanas y llevamos las tareas en Jira. Las 11 historias de usuario están en el ERS (anexo 5.4).
+
+| Sprint | Fechas | De qué se trata |
+| --- | --- | --- |
+| Sprint 0 | 24/08 al 06/09 | Kick-off y alcance |
+| Sprint 1 | 07/09 al 20/09 | Requisitos (ERS), diseño de la base de datos y contratos de la API |
+| Sprint 2 | 21/09 al 04/10 | Base de datos, backend con seguridad y diseño de pantallas |
+| Sprint 3 | 05/10 al 18/10 | App móvil, panel web e integración con el backend |
+| Sprint 4 | 19/10 al 01/11 | Power BI, pruebas finales y cierre |
+
+El detalle de cada sprint está en `docs/sprint-N/`.
+
+## Documentación
+
+- **ERS** (requisitos) y **DAS** (arquitectura, con el modelo de vistas 4+1): `docs/arquitectura/`
+- **Diagramas UML:** `docs/arquitectura/uml/`
+- **Visión del producto y backlogs:** `docs/Evidencias Proyecto/`
+- **Pruebas:** `docs/qa/` y el README de cada sprint

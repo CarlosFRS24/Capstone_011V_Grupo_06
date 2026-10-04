@@ -1,16 +1,41 @@
-# 🚀 Visión del Producto: OmniDock
+# Visión del producto: OmniDock
 
-## El Problema
-El crecimiento desregulado de la micromovilidad (bicicletas y scooters) en recintos institucionales genera caos logístico, vulnerabilidades de seguridad y un uso ineficiente del espacio físico. La administración opera a ciegas sin datos transaccionales para justificar inversiones.
+## El problema
 
-## Nuestra Solución
-**OmniDock** es una plataforma SaaS transaccional de gestión de estacionamientos de micromovilidad que transforma la infraestructura pasiva en puntos de control activos, utilizando validación de hardware IoT y analítica de datos.
+Cada vez llega más gente en bicicleta o scooter a las sedes, y no hay orden: no se sabe dónde hay espacio, los vehículos quedan poco seguros y los estacionamientos se usan mal. Además, la administración no tiene datos de cuánto se usan, así que no puede justificar inversiones.
 
-## Propuesta de Valor (Doble Enfoque)
-1. **Para el Usuario Final (Comunidad):** Elimina la incertidumbre. A través de una App Móvil, los usuarios pueden consultar disponibilidad en tiempo real, autogestionar reservas y asegurar su vehículo mediante su credencial institucional (NFC/QR).
-2. **Para la Institución (Gerencia):** Otorga gobernanza total. A través de un Panel Web y tableros de Power BI, la gerencia accede a métricas inmutables (tasas de ocupación, horarios punta) transformando la gestión del espacio en Inteligencia de Negocios (BI).
+## Nuestra solución
 
-## El Equipo (Nodalix)
-* **Carlos Román:** Scrum Master / Product Owner / UI-UX
-* **Crisler Romero:** Arquitectura de Datos / Analítica (BI)
-* **Felipe Vidal:** Desarrollo Backend / Integración IoT
+**OmniDock** es una plataforma para gestionar estacionamientos de bicicletas y scooters. El usuario reserva y abre su bahía desde una app, y la institución ve lo que pasa en un panel web y en tableros de Power BI. Los racks se controlan con dispositivos IoT, que en el prototipo se simulan por software.
+
+## Para quién
+
+- **Usuario final:** estudiantes, docentes y funcionarios que llegan en bicicleta o scooter.
+- **Administrador:** el personal que opera los racks, gestiona los usuarios y revisa las métricas.
+
+## Qué le aporta a cada uno
+
+1. **Al usuario:** puede ver antes de llegar si hay espacio, reservar desde la app y dejar su vehículo asegurado escaneando el código QR del rack.
+2. **A la institución:** controla los racks y los usuarios desde un panel web, y ve en Power BI cuánto se ocupan los estacionamientos y a qué horas, con registros que no se pueden borrar.
+
+## Cómo sabremos que funciona
+
+Son las metas que nos pusimos en el DAS (sección 7):
+
+| Indicador | Hoy | Meta con OmniDock |
+| --- | --- | --- |
+| Tiempo para encontrar estacionamiento | 8 a 12 minutos | Menos de 2 minutos |
+| Registro de cada uso | No existe | 100 % de los usos registrados |
+| Tiempo para resolver una falla | Días o semanas | 65 % menos |
+| Rotación por rack | No se mide | 35 % más |
+
+## Qué incluye el prototipo
+
+- **Incluye:** backend en Java, base de datos Oracle, app móvil, panel web, simulador IoT y tablero en Power BI.
+- **No incluye:** hardware físico ni pagos. La lectura por NFC queda para más adelante.
+
+## El equipo (Nodalix)
+
+- **Carlos Román:** líder del proyecto (Scrum Master y Product Owner) y diseño de pantallas.
+- **Crisler Romero:** arquitectura de datos y BI.
+- **Felipe Vidal:** backend e integración IoT.
