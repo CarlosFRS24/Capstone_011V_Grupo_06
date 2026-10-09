@@ -1,7 +1,5 @@
 -- ==============================================================================
 -- OMNIDOCK - DATOS DE PRUEBA (v4)
--- ORDEN: 00_drop.sql -> 01_ddl.sql -> 02_insert.sql -> 03_verificar.sql
---
 -- Ejecutar SIEMPRE sobre tablas recien creadas: los IDs de usuarios, bahias,
 -- vehiculos y reservas se numeran solos desde 1, en el orden de este archivo.
 -- Todas las fechas van en UTC, igual que el backend.

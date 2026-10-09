@@ -2,8 +2,6 @@
 -- PROYECTO: OmniDock - Sprint 1 (Arquitectura Completa)
 -- AUTOR: Crisler Romero (Arquitectura de Datos)
 -- MOTOR: Oracle SQL
--- ORDEN: 00_drop.sql -> 01_ddl.sql -> 02_insert.sql -> 03_verificar.sql
--- Capa analitica (aparte): 04_vistas_bi.sql -> 05_consultas_bi.sql
 -- Las claves se numeran solas desde 1.
 -- Los tres catalogos aceptan ID explicito porque el backend los usa por numero.
 -- Las fechas por defecto quedan en UTC, igual que el backend.

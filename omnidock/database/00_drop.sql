@@ -2,7 +2,6 @@
 -- PROYECTO: OmniDock - Sprint 1 (Arquitectura Completa)
 -- AUTOR: Crisler Romero (Arquitectura de Datos)
 -- MOTOR: Oracle SQL
--- ORDEN: 00_drop.sql -> 01_ddl.sql -> 02_insert.sql -> 03_verificar.sql
 -- En el caso de existir tablas, primero eliminar todo antes de ejecutar el resto de archivos SQL en orden.
 -- ==============================================================================
 DROP TABLE TICKET_MANTENIMIENTO CASCADE CONSTRAINTS;
