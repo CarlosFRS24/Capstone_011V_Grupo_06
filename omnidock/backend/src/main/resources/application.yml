@@ -1,0 +1,50 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: omnidock-backend
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@//localhost:1521/XEPDB1}
+    username: ${DB_USER:omnidock}
+    password: ${DB_PASSWORD:omnidock}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: ${JPA_DDL:none}   # usa "validate" una vez para detectar columnas mal mapeadas
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        type:
+          preferred_instant_jdbc_type: TIMESTAMP
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+omnidock:
+  jwt:
+    secret: ${JWT_SECRET:omnidock-secreto-de-desarrollo-cambiar-en-produccion-0123456789}
+    expiration-minutes: ${JWT_EXP_MIN:240}
+  cors:
+    origins: ${CORS_ORIGINS:http://localhost:8100,http://localhost:4200,http://localhost,https://localhost,capacitor://localhost,ionic://localhost}
+  reserva:
+    minutos-expiracion: ${RESERVA_MINUTOS:15}
+    intervalo-expiracion-ms: 30000
+  iot:
+    base-url: ${IOT_BASE_URL:http://localhost:8080}   # con perfil "mock" apunta a sí mismo
+    api-key: ${IOT_API_KEY:omnidock-iot-key}
+    timeout-ms: 2000
+  powerbi:
+    modo: ${PBI_MODO:publicado}          # publicado = iframe con URL ya publicada | embedded = token Azure AD
+    embed-url: ${PBI_EMBED_URL:}
+    tenant-id: ${PBI_TENANT_ID:}
+    client-id: ${PBI_CLIENT_ID:}
+    client-secret: ${PBI_CLIENT_SECRET:}
+    workspace-id: ${PBI_WORKSPACE_ID:}
+    report-id: ${PBI_REPORT_ID:}
