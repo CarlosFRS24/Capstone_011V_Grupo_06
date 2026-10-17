@@ -1,0 +1,108 @@
+/* ==========================================================================
+   Estilos comunes del diseño de Figma (app móvil y panel web)
+   ========================================================================== */
+ion-toolbar { --background: #fff; --color: var(--od-ink); --border-color: var(--od-line); --min-height: 56px; }
+ion-toolbar ion-title { font-weight: 700; font-size: 18px; padding-inline: 16px; text-align: left; }
+ion-header, ion-header.header-md { box-shadow: none; border-bottom: 1px solid var(--od-line); }
+ion-footer.footer-md { box-shadow: none; }
+ion-header ion-toolbar ion-button { --color: var(--od-ink); }
+ion-tab-bar { --background: #fff; --border: 1px solid var(--od-line); height: 62px; --color: var(--od-muted); --color-selected: var(--od-blue); }
+ion-tab-button { font-size: 11px; font-weight: 500; }
+ion-tab-button.tab-selected { font-weight: 700; }
+ion-tab-button ion-icon { font-size: 21px; }
+
+ion-button { --border-radius: 10px; --box-shadow: none; text-transform: none; font-weight: 600; letter-spacing: 0; font-size: 15px; }
+ion-button[expand='block'] { min-height: 48px; margin-inline: 0; }
+ion-button.sec { --background: #fff; --color: var(--od-ink); --border-color: var(--od-line); --border-width: 1px; --border-style: solid; --background-hover: var(--od-bg); --background-activated: var(--od-bg); }
+
+/* Texto */
+.h1 { font-size: 24px; font-weight: 700; margin: 0; color: var(--od-ink); letter-spacing: -.2px; }
+.h2 { font-size: 18px; font-weight: 700; margin: 0; color: var(--od-ink); }
+.sub { font-size: 13px; color: var(--od-muted); margin: 4px 0 0; }
+.muted { color: var(--od-muted); font-size: 13px; }
+.nota { text-align: center; font-size: 12px; color: var(--od-muted); margin: 10px 0 0; }
+.rotulo { font-size: 13px; color: var(--od-muted); margin: 0 0 6px; }
+
+/* Contenedores */
+.app-wrap { max-width: 520px; margin: 0 auto; padding: 22px 18px 28px; }
+.page-max { max-width: 1180px; margin: 0 auto; }
+.od-card { background: #fff; border: 1px solid var(--od-line); border-radius: 12px; padding: 14px 16px; }
+.od-card + .od-card { margin-top: 12px; }
+.od-card.oscura { background: var(--od-navy-2); border-color: var(--od-navy-2); color: #fff; }
+.od-card.oscura small { display: block; font-size: 12px; opacity: .85; }
+.od-card.oscura b { font-size: 17px; }
+.card { background: #fff; border: 1px solid var(--od-line); border-radius: 12px; padding: 16px; margin: 12px; }
+.empty { text-align: center; padding: 44px 24px; color: var(--od-muted); ion-icon { font-size: 52px; opacity: .45; } p { margin: 10px 0 16px; } }
+.fila { display: flex; align-items: center; gap: 12px; }
+.fila .crece { flex: 1; min-width: 0; }
+.separa { border-top: 1px solid var(--od-line); margin: 12px 0; }
+.par { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--od-muted); b { color: var(--od-ink); } }
+
+/* Mosaico de icono */
+.tile { width: 38px; height: 38px; border-radius: 10px; background: var(--od-blue-soft); color: var(--od-blue); display: grid; place-items: center; flex: none; font-size: 20px; }
+.tile.gris { background: #eef2f7; color: var(--od-ink); }
+.tile.verde { background: var(--od-green-soft); color: var(--od-green); }
+.tile.roja { background: var(--od-red-soft); color: var(--od-red); }
+
+/* Etiquetas de estado */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: #eef2f7; color: var(--od-muted); }
+.chip.punto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.chip.verde, .chip.e1 { background: var(--od-green-soft); color: #3f7d12; }
+.chip.ambar, .chip.e2 { background: var(--od-amber-soft); color: #a86a00; }
+.chip.azul, .chip.e3 { background: var(--od-blue-soft); color: var(--od-blue); }
+.chip.roja, .chip.e4 { background: var(--od-red-soft); color: var(--od-red); }
+.estado-chip { @extend .chip; }
+.estado-chip.e1 { @extend .chip, .verde; }
+.estado-chip.e2 { @extend .chip, .ambar; }
+.estado-chip.e3 { @extend .chip, .azul; }
+.estado-chip.e4 { @extend .chip, .roja; }
+
+/* Campos */
+.campo { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--od-line); border-radius: 10px; padding: 0 14px; height: 46px; color: var(--od-ink); font-size: 14px; }
+.campo input, .campo select { border: 0; outline: 0; background: transparent; flex: 1; min-width: 0; height: 100%; font: inherit; color: inherit; }
+.campo input::placeholder { color: #94a3b8; }
+.campo ion-icon { color: var(--od-muted); font-size: 18px; flex: none; }
+.campo:focus-within { border-color: var(--od-blue); }
+.aviso { display: flex; gap: 10px; align-items: flex-start; background: var(--od-blue-soft); border-radius: 12px; padding: 12px 14px; font-size: 12.5px; color: var(--od-muted); b { display: block; color: var(--od-ink); font-size: 13px; } }
+.aviso.verde { background: var(--od-green-soft); color: #3f7d12; align-items: center; }
+.enlace { color: var(--od-blue); font-weight: 600; background: none; border: 0; padding: 0; font: inherit; font-weight: 600; cursor: pointer; }
+.enlace.rojo { color: var(--od-red); }
+
+/* ==========================================================================
+   Panel web administrativo
+   ========================================================================== */
+.adm { padding: 34px 36px 40px; max-width: 1240px; }
+.adm-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 22px; }
+.adm-top .crece { flex: 1; min-width: 0; }
+.adm-top h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -.3px; color: var(--od-ink); }
+.adm-top p { margin: 8px 0 0; font-size: 14px; color: var(--od-muted); }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--od-blue); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none; }
+.avatar.suave { background: var(--od-blue-soft); color: var(--od-blue); width: 34px; height: 34px; font-size: 11px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 245px)); gap: 16px; margin-bottom: 18px; }
+.kpi { background: #fff; border: 1px solid var(--od-line); border-radius: 14px; padding: 18px 22px; text-align: left; display: flex; align-items: center; gap: 14px; font: inherit; color: inherit; }
+button.kpi { cursor: pointer; }
+.kpi.sel { border-color: var(--od-blue); box-shadow: 0 0 0 2px var(--od-blue-soft); }
+.kpi b { display: block; font-size: 26px; line-height: 1.1; color: var(--od-ink); }
+.kpi span { font-size: 13px; color: var(--od-muted); }
+.kpi.verde b { color: var(--od-green); } .kpi.ambar b { color: var(--od-amber); }
+.kpi.azul b { color: var(--od-blue); }   .kpi.roja b { color: var(--od-red); }
+.kpi .tile { border-radius: 50%; width: 40px; height: 40px; font-size: 20px; }
+.filtros { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; align-items: center; }
+.filtros .campo { height: 48px; border-radius: 12px; }
+.filtros .campo.busca { flex: 1 1 280px; max-width: 430px; }
+.filtros .campo.sel { flex: 0 1 180px; padding-right: 8px; }
+.filtros ion-button { min-height: 48px; margin: 0; --border-radius: 12px; }
+.vivo { font-size: 12px; color: var(--od-muted); margin: -10px 0 14px; }
+.tabla-caja { background: #fff; border: 1px solid var(--od-line); border-radius: 14px; overflow-x: auto; }
+table.tabla { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px; }
+.tabla th { text-align: left; font-size: 12.5px; font-weight: 600; color: var(--od-muted); padding: 22px 12px 12px; white-space: nowrap; }
+.tabla td { padding: 18px 12px; border-top: 1px solid var(--od-line); color: var(--od-ink); vertical-align: middle; }
+.tabla th:first-child, .tabla td:first-child { padding-left: 24px; }
+.tabla th:last-child, .tabla td:last-child { padding-right: 16px; text-align: right; width: 70px; }
+.tabla td.gris { color: var(--od-muted); }
+.tabla .quien { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.tabla .chip { font-size: 12.5px; padding: 5px 14px; }
+.tabla-pie { padding: 16px 24px; font-size: 13px; color: var(--od-muted); text-align: right; border-top: 1px solid var(--od-line); }
+.mas { background: none; border: 0; padding: 6px; border-radius: 8px; color: var(--od-muted); cursor: pointer; font-size: 18px; line-height: 0; }
+.mas:hover { background: var(--od-bg); color: var(--od-ink); }
+@media (max-width: 700px) { .adm { padding: 20px 16px 32px; } .adm-top h1 { font-size: 22px; } }
