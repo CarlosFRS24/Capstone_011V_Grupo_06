@@ -1,0 +1,59 @@
+/* Paleta del diseño de Figma (KAN-34) */
+:root {
+  --od-navy: #1b2a4a;
+  --od-navy-2: #24364f;
+  --od-ink: #14213d;
+  --od-muted: #64748b;
+  --od-line: #e3e8f0;
+  --od-bg: #f6f8fc;
+  --od-blue: #0b6bff;
+  --od-blue-soft: #e8f0ff;
+  --od-green: #6fb62c;
+  --od-green-soft: #eaf6dc;
+  --od-amber: #e69a00;
+  --od-amber-soft: #fff3d1;
+  --od-red: #e5484d;
+  --od-red-soft: #fde8e8;
+
+  --ion-color-primary: #0b6bff;
+  --ion-color-primary-rgb: 11, 107, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0a5ee0;
+  --ion-color-primary-tint: #237aff;
+
+  --ion-color-secondary: #1b2a4a;
+  --ion-color-secondary-rgb: 27, 42, 74;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #182541;
+  --ion-color-secondary-tint: #323f5c;
+
+  --ion-color-success: #6fb62c;
+  --ion-color-success-rgb: 111, 182, 44;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-shade: #62a027;
+  --ion-color-success-tint: #7dbd41;
+  --ion-color-warning: #e69a00;
+  --ion-color-warning-rgb: 230, 154, 0;
+  --ion-color-warning-contrast: #14213d;
+  --ion-color-warning-shade: #ca8800;
+  --ion-color-warning-tint: #e9a41a;
+  --ion-color-danger: #e5484d;
+  --ion-color-danger-rgb: 229, 72, 77;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-shade: #ca3f44;
+  --ion-color-danger-tint: #e85a5f;
+  --ion-color-medium: #64748b;
+  --ion-color-medium-rgb: 100, 116, 139;
+
+  --ion-background-color: #f6f8fc;
+  --ion-text-color: #14213d;
+  --ion-font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Colores por estado de bahía */
+  --estado-disponible: var(--od-green);
+  --estado-reservada: var(--od-amber);
+  --estado-ocupada: var(--od-blue);
+  --estado-fuera: var(--od-red);
+}

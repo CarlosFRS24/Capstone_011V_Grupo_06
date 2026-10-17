@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">OmniDock</string>
+    <string name="title_activity_main">OmniDock</string>
+    <string name="package_name">cl.nodalix.omnidock</string>
+    <string name="custom_url_scheme">cl.nodalix.omnidock</string>
+</resources>

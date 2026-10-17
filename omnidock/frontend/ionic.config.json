@@ -1,0 +1,1 @@
+{ "name": "omnidock-app", "integrations": { "capacitor": {} }, "type": "angular-standalone" }
