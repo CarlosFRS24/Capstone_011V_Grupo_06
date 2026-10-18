@@ -1,0 +1,32 @@
+wallet/
+**/wallet/
+*.p12
+*.sso
+*.jks
+.env
+.env.*
+
+# Compilados y dependencias
+**/target/
+**/node_modules/
+**/www/
+**/.angular/
+**/build/
+*.apk
+*.aab
+
+# IDE y sistema
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+
+# Archivos temporales de Office
+~$*
+.~lock.*#

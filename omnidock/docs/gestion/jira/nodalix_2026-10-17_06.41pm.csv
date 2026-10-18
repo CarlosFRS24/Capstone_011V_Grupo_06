@@ -1,0 +1,75 @@
+Clave,Tipo de Incidencia,Principal,Resumen,Estado,Persona asignada,Sprint,Fecha de inicio,Fecha de inicio deducida,Fecha de vencimiento,Fecha de vencimiento deducida
+KAN-30,Epic,,Kick-Off ,Finalizado,Carlos Román Sepúlveda,,21/ago/26 12:00 AM,21/ago/26 11:00 PM,06/sep/26 12:00 AM,06/sep/26 1:00 AM
+KAN-4,Epic,,Documentación y diseños iniciales,Finalizado,Carlos Román Sepúlveda,,07/sep/26 12:00 AM,11/sep/26 12:18 PM,20/sep/26 12:00 AM,04/oct/26 12:00 AM
+KAN-5,Epic,,Core Backend y Seguridad,Finalizado,Carlos Román Sepúlveda,,21/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-41,Epic,,Aplicación Móvil (Usuario),Finalizado,Carlos Román Sepúlveda,,05/oct/26 12:00 AM,05/oct/26 8:30 AM,,18/oct/26 12:00 AM
+KAN-42,Epic,,Plataforma Web (Admin),En curso,Carlos Román Sepúlveda,,05/oct/26 12:00 AM,05/oct/26 8:30 AM,,01/nov/26 12:00 AM
+KAN-6,Epic,,Integración IoT & UI,Finalizado,Carlos Román Sepúlveda,,05/oct/26 12:00 AM,05/oct/26 8:30 AM,18/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-9,Tarea,KAN-4,Levantamiento de Requerimientos (ERS),Finalizado,Carlos Román Sepúlveda,KAN Sprint 1,07/sep/26 12:00 AM,11/sep/26 12:18 PM,09/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-7,Tarea,KAN-4,Diseño de BD Oracle,Finalizado,Kris,KAN Sprint 1,07/sep/26 12:00 AM,11/sep/26 12:18 PM,17/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-8,Tarea,KAN-4,Definición contratos API,Finalizado,f.vidalv,KAN Sprint 1,14/sep/26 12:00 AM,11/sep/26 12:18 PM,17/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-34,Tarea,KAN-4,Diseño UI (Web y Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-12,Tarea,KAN-5,Programación de CRUD en Java,Finalizado,f.vidalv,KAN Sprint 2,23/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-13,Tarea,KAN-5,Implementación de seguridad JWT,Finalizado,f.vidalv,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-14,Tarea,KAN-5,Estructuración BD,Finalizado,Kris,KAN Sprint 2,21/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-19,Tarea,KAN-6,Desarrollo UI (Web y Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,11/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-18,Tarea,KAN-6,Integración de Sistemas (Front + Back + BD),Finalizado,f.vidalv,KAN Sprint 3,11/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-37,Historia,KAN-41,Historial de Autogestión (App Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-35,Historia,KAN-41,Registro y Consulta de Bahías Disponibles (App Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-36,Historia,KAN-41,Escaneo e Iniciación de Sesión de Uso (App Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-38,Historia,KAN-42,Gestión y Monitoreo de Racks (Web Admin,Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-39,Historia,KAN-42,Administración de Usuarios y Permisos (Web Admin),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-27,Tarea,KAN-26,Despliegue Pipeline Data hacia PowerBI,Por hacer,Kris,KAN Sprint 4,20/oct/26 12:00 AM,19/oct/26 12:00 AM,,01/nov/26 12:00 AM
+KAN-28,Tarea,KAN-26,Pruebas de Integración,Por hacer,f.vidalv,KAN Sprint 4,23/oct/26 12:00 AM,19/oct/26 12:00 AM,,01/nov/26 12:00 AM
+KAN-29,Tarea,KAN-26,Empaquetado del prototipo,Por hacer,Carlos Román Sepúlveda,KAN Sprint 4,26/oct/26 12:00 AM,19/oct/26 12:00 AM,,01/nov/26 12:00 AM
+KAN-40,Historia,KAN-42,Embebimiento y Exposición de Dashboards (Web Admin),Por hacer,Kris,KAN Sprint 4,,19/oct/26 12:00 AM,,01/nov/26 12:00 AM
+KAN-31,Tarea,KAN-30,Acta de Kick-off,Finalizado,Carlos Román Sepúlveda,KAN Sprint 0,21/ago/26 12:00 AM,21/ago/26 11:00 PM,28/ago/26 12:00 AM,06/sep/26 1:00 AM
+KAN-32,Tarea,KAN-30,Definición de Alcances,Finalizado,Carlos Román Sepúlveda,KAN Sprint 0,28/ago/26 12:00 AM,21/ago/26 11:00 PM,03/sep/26 12:00 AM,06/sep/26 1:00 AM
+KAN-33,Tarea,KAN-30,Comienzo de ERS,Finalizado,Carlos Román Sepúlveda,KAN Sprint 0,28/ago/26 12:00 AM,21/ago/26 11:00 PM,06/sep/26 12:00 AM,06/sep/26 1:00 AM
+KAN-26,Epic,,Analítica y Cierre,En curso,Carlos Román Sepúlveda,,06/oct/26 12:00 AM,05/oct/26 8:30 AM,01/nov/26 12:00 AM,01/nov/26 12:00 AM
+KAN-43,Subtask,KAN-7,Análisis de Requerimientos y Entidades Principales,Finalizado,Kris,KAN Sprint 1,07/sep/26 12:00 AM,11/sep/26 12:18 PM,09/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-44,Subtask,KAN-7,Diseño del Modelo Relacional (MER/DER,Finalizado,Kris,KAN Sprint 1,09/sep/26 12:00 AM,11/sep/26 12:18 PM,12/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-45,Subtask,KAN-7,Modelado de Catálogos y Control de Accesos,Finalizado,Kris,KAN Sprint 1,14/sep/26 12:00 AM,11/sep/26 12:18 PM,15/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-46,Subtask,KAN-7,Integración del Ecosistema IoT y Mantenimiento,Finalizado,Kris,KAN Sprint 1,15/sep/26 12:00 AM,11/sep/26 12:18 PM,17/sep/26 12:00 AM,20/sep/26 12:00 AM
+KAN-47,Subtask,KAN-14,Desarrollo de Scripts DDL (Data Definition Language),Finalizado,Kris,KAN Sprint 2,21/sep/26 12:00 AM,21/sep/26 10:49 AM,03/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-48,Subtask,KAN-14,Implementación de Reglas de Negocio a Nivel de Motor,Finalizado,Kris,KAN Sprint 2,04/oct/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-49,Subtask,KAN-14,Generación de Datos Sintéticos y Scripts DML,Finalizado,Kris,KAN Sprint 2,28/sep/26 12:00 AM,21/sep/26 10:49 AM,03/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-50,Subtask,KAN-14,Estrategia de Limpieza y Control de Identidades (Hard Reset),Finalizado,Kris,KAN Sprint 2,02/oct/26 12:00 AM,21/sep/26 10:49 AM,03/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-51,Subtask,KAN-14,Extracción Analítica (Queries de Integración y BI),Finalizado,Kris,KAN Sprint 2,04/oct/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-52,Subtask,KAN-12,Configuración base y conexión a Oracle DB,Finalizado,f.vidalv,KAN Sprint 2,23/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-53,Subtask,KAN-12,Mapeo JPA (Mantenedores y Transacciones),Finalizado,f.vidalv,KAN Sprint 2,23/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-54,Subtask,KAN-12,Lógica de Negocio y Reglas ACID,Finalizado,f.vidalv,KAN Sprint 2,23/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-55,Subtask,KAN-12,Controladores REST (Exposición de APIs),Finalizado,f.vidalv,KAN Sprint 2,23/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-56,Subtask,KAN-13,Configuración de Spring Security,Finalizado,f.vidalv,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,28/sep/26 12:00 AM,04/oct/26 12:00 AM
+KAN-57,Subtask,KAN-13,Endpoint de Autenticación y Directorio Externo,Finalizado,f.vidalv,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-58,Subtask,KAN-13,Filtro Interceptor de JWT,Finalizado,f.vidalv,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-59,Subtask,KAN-13,Políticas de Roles,Finalizado,f.vidalv,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-60,Subtask,KAN-34,Definición del Sistema de Diseño y UI Kit,Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-61,Subtask,KAN-34,(App Móvil) Diseño de Vistas - Autenticación y Home,Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-62,Subtask,KAN-34,"(App Móvil) Diseño de vistas - Flujo Reserva, escaner QR y sesiones",Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-63,Subtask,KAN-34,"(App Móvil) Diseño de Vistas - Perfil, Historial, Gestión Vehiculos",Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-64,Subtask,KAN-34,(Web) Diseño de Vistas - Dashboard de Monitoreo,Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-65,Subtask,KAN-34,(Web) Diseño de Vistas - Gestión de Usuarios,Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-66,Subtask,KAN-34,Prototipado interactivo (Móvil y Web),Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-67,Subtask,KAN-34,Exportación de Assets para Desarrollo,Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,25/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-68,Historia,KAN-5,Autenticación con directorio institucional,Finalizado,f.vidalv,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,11/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-69,Historia,KAN-5,Asignación inteligente por vehículo,Finalizado,f.vidalv,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,11/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-70,Historia,KAN-6,Comunicación con infrestructura física,Finalizado,f.vidalv,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,14/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-71,Historia,KAN-5,Trazabilidad transaccional e inmutabilidad,Finalizado,Kris,KAN Sprint 2,02/oct/26 12:00 AM,21/sep/26 10:49 AM,02/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-72,Historia,KAN-26,Pipeline de datos para reportes,Por hacer,Kris,KAN Sprint 4,,19/oct/26 12:00 AM,,01/nov/26 12:00 AM
+KAN-73,Tarea,KAN-4,Documento de Arquitectura (DAS),Finalizado,Kris,KAN Sprint 2,21/sep/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-74,Tarea,KAN-4,Actualización ERS,Finalizado,Carlos Román Sepúlveda,KAN Sprint 2,02/oct/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-75,Tarea,KAN-4,Diagramas UML,Finalizado,Kris,KAN Sprint 2,23/sep/26 12:00 AM,21/sep/26 10:49 AM,03/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-76,Tarea,KAN-4,Pruebas QA Sprints 1 y 2,Finalizado,f.vidalv,KAN Sprint 2,02/oct/26 12:00 AM,21/sep/26 10:49 AM,04/oct/26 12:00 AM,04/oct/26 12:00 AM
+KAN-77,Tarea,KAN-26,Carga de datos históricos de ejemplo,Finalizado,Kris,KAN Sprint 3,06/oct/26 12:00 AM,05/oct/26 8:30 AM,08/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-78,Tarea,KAN-26,Ejecución de consultas para Power BI,Finalizado,Kris,KAN Sprint 3,08/oct/26 12:00 AM,05/oct/26 8:30 AM,09/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-79,Tarea,KAN-26,Pruebas de las restricciones de la base,Finalizado,Kris,KAN Sprint 3,08/oct/26 12:00 AM,05/oct/26 8:30 AM,08/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-80,Tarea,KAN-26,Limpieza de datos de prueba en las vistas,Finalizado,Kris,KAN Sprint 3,13/oct/26 12:00 AM,05/oct/26 8:30 AM,13/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-81,Tarea,KAN-26,Prueba de conexión de Power BI a Oracle,Finalizado,Kris,KAN Sprint 3,14/oct/26 12:00 AM,05/oct/26 8:30 AM,16/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-82,Subtask,KAN-19,Base del frontend y cliente API (Web y Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,06/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-83,Subtask,KAN-19,Autenticación y acceso por roles (Web y Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,05/oct/26 12:00 AM,05/oct/26 8:30 AM,07/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-84,Subtask,KAN-19,"Consulta de bahías, vehículos y reservas (App Móvil)",Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,06/oct/26 12:00 AM,05/oct/26 8:30 AM,08/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-85,Subtask,KAN-19,Escaneo QR e inicio de sesión de uso (App Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,09/oct/26 12:00 AM,05/oct/26 8:30 AM,11/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-86,Subtask,KAN-19,Vehículos e historial (App Móvil),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,07/oct/26 12:00 AM,05/oct/26 8:30 AM,09/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-87,Subtask,KAN-19,Gestión y monitoreo de racks (Web Admin),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,08/oct/26 12:00 AM,05/oct/26 8:30 AM,10/oct/26 12:00 AM,18/oct/26 12:00 AM
+KAN-88,Subtask,KAN-19,Administración de usuarios y permisos (Web Admin),Finalizado,Carlos Román Sepúlveda,KAN Sprint 3,08/oct/26 12:00 AM,05/oct/26 8:30 AM,10/oct/26 12:00 AM,18/oct/26 12:00 AM

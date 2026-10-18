@@ -2,7 +2,7 @@
 
 ## El problema
 
-Cada vez llega más gente en bicicleta o scooter a las sedes, y no hay orden: no se sabe dónde hay espacio, los vehículos quedan poco seguros y los estacionamientos se usan mal. Además, la administración no tiene datos de cuánto se usan, así que no puede justificar inversiones.
+Cada vez llega más gente en bicicleta o scooter a las sedes. Los bicicleteros son estructuras de fierro en forma de U invertida, donde cada uno deja su vehículo con su propio candado. Hace poco se agregó un control con el RUT y un código de barras en las bicicletas, que registra la entrada y la salida, pero a la salida no siempre se revisa que la bicicleta sea de quien la saca. Tampoco dice si hay espacio antes de llegar, en qué lugar quedó cada vehículo ni a qué horas se llena cada sector. Por eso la administración no tiene datos para decidir dónde poner más racks.
 
 ## Nuestra solución
 
@@ -25,7 +25,7 @@ Son las metas que nos pusimos en el DAS (sección 7):
 | Indicador | Hoy | Meta con OmniDock |
 | --- | --- | --- |
 | Tiempo para encontrar estacionamiento | 8 a 12 minutos | Menos de 2 minutos |
-| Registro de cada uso | No existe | 100 % de los usos registrados |
+| Registro de cada uso | Entrada y salida con RUT y código de barras, sin revisar siempre que la bicicleta sea del mismo dueño | 100 % de los usos registrados, con rack, hora de llegada y de salida |
 | Tiempo para resolver una falla | Días o semanas | 65 % menos |
 | Rotación por rack | No se mide | 35 % más |
 

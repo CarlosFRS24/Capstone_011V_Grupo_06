@@ -1,0 +1,659 @@
+OmniDock - Regresion de la API - detalle de cada llamada
+Ejecucion del 11/10/2026 23:09:54 contra http://localhost:8080. Las claves y los tokens se reemplazan por <oculto>.
+
+[PREPARACION] 23:09:54.154  GET /v3/api-docs  (sin token)
+  respuesta: 200 en 137 ms
+  {"openapi": "3.0.1", "info": {"title": "OpenAPI definition", "version": "v0"}, "servers": [{"url": "http://localhost:8080", "description": "Generated server url"}], "paths": {"/api/v1/usuarios/{id}": {"put": {"tags": ["usuario-controller"], "operationId": "actualizar", "parameters": [{"name": "id", "in": "path", "required": true, "schema": {"type": "integer", "format": "int64"}}], "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/UsuarioUpdate"}}}, "required": true}, "responses": {"200": {"description": "OK", "content": {"*/*": {"schema": {"type": "object", "additionalProperties": {"type": "object"}}}}}}}, "delete": {"tags": ["usuario-controller"], "operationId": "eliminar_1", "parameters": [{"name": "id", "in": "path", "required": true, "schema": {"type": "integer", "format": "int64"}}], "responses": {"200": {"description": "OK"}}}}, "/api/v1/tickets/{id}": {"put": {"tags": ["ticket-controller"], "operationId": "actualizar_1", "parameters": [{"name": "id", "in": "path", "required": true, "schema": {"type": "integer", "format": "int64"}}], "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/TicketUpdate"}}}, "required": true}, "responses": {"200": {"description": "OK", "content": {"*/*": {"schema": {"type": "object", "additionalProperties": {"type": "object"}}}}}}}, "delete": {"tags": ["ticket-controller"], "operationId": "eliminar_2", "parameters": [{"name": "id", "in": "path", "required": true, "s ... (recortado)
+
+[S2-AUTH-01] 23:09:54.363  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "csoto@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 208 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 1, "rut": "17234567-K", "nombreCompleto": "Camila Soto", "emailInstitucional": "csoto@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}}
+
+[PREPARACION] 23:09:54.496  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "81359178-9", "nombreCompleto": "QA Regresion A (ignorar)", "emailInstitucional": "qa.a.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>", "idRol": 2}
+  respuesta: 201 en 133 ms
+  {"mensaje": "Usuario creado", "idUsuario": 21}
+
+[PREPARACION] 23:09:54.554  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "14971286-6", "nombreCompleto": "QA Regresion B (ignorar)", "emailInstitucional": "qa.b.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>", "idRol": 2}
+  respuesta: 201 en 58 ms
+  {"mensaje": "Usuario creado", "idUsuario": 22}
+
+[PREPARACION] 23:09:54.613  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "37547846-5", "nombreCompleto": "QA Regresion COLAB (ignorar)", "emailInstitucional": "qa.colab.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>", "idRol": 3}
+  respuesta: 201 en 59 ms
+  {"mensaje": "Usuario creado", "idUsuario": 23}
+
+[S2-AUTH-02] 23:09:54.650  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.a.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 37 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 21, "rut": "81359178-9", "nombreCompleto": "QA Regresion A (ignorar)", "emailInstitucional": "qa.a.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}}
+
+[PREPARACION] 23:09:54.678  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.b.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 28 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 22, "rut": "14971286-6", "nombreCompleto": "QA Regresion B (ignorar)", "emailInstitucional": "qa.b.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}}
+
+[PREPARACION] 23:09:54.712  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.colab.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 34 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 23, "rut": "37547846-5", "nombreCompleto": "QA Regresion COLAB (ignorar)", "emailInstitucional": "qa.colab.1011230954@duocuc.cl", "idRol": 3, "estadoSincronizacion": "VIGENTE"}}
+
+[S2-AUTH-03] 23:09:54.740  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.a.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 401 en 28 ms
+  {"error": "UNAUTHORIZED", "mensaje": "Credenciales inválidas"}
+
+[S2-AUTH-04] 23:09:54.763  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "no.existe.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 401 en 23 ms
+  {"error": "UNAUTHORIZED", "mensaje": "Credenciales inválidas"}
+
+[S2-AUTH-05] 23:09:54.779  POST /api/v1/auth/login  (sin token)
+  envio: {}
+  respuesta: 400 en 16 ms
+  {"error": "BAD_REQUEST", "mensaje": "passwordPrototipo: no debe estar vacío; emailInstitucional: no debe estar vacío"}
+
+[S2-AUTH-06] 23:09:54.782  GET /api/v1/auth/me  (sin token)
+  respuesta: 401 en 3 ms
+  {"error": "UNAUTHORIZED", "mensaje": "No autenticado o token inválido/expirado"}
+
+[S2-AUTH-07] 23:09:54.783  GET /api/v1/auth/me  (token adulterado)
+  respuesta: 401 en 1 ms
+  {"error": "UNAUTHORIZED", "mensaje": "No autenticado o token inválido/expirado"}
+
+[S2-AUTH-08] 23:09:54.807  GET /api/v1/auth/me  (usuario A)
+  respuesta: 200 en 24 ms
+  {"idUsuario": 21, "rut": "81359178-9", "nombreCompleto": "QA Regresion A (ignorar)", "emailInstitucional": "qa.a.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}
+
+[S2-AUTH-09] 23:09:54.836  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "QA.A.1011230954@DUOCUC.CL", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 29 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 21, "rut": "81359178-9", "nombreCompleto": "QA Regresion A (ignorar)", "emailInstitucional": "qa.a.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}}
+
+[S2-RBAC-01] 23:09:54.849  GET /api/v1/usuarios  (usuario A)
+  respuesta: 403 en 12 ms
+  {"error": "FORBIDDEN", "mensaje": "Sin permisos para esta operación"}
+
+[S2-RBAC-02] 23:09:54.862  POST /api/v1/bahias  (usuario A)
+  envio: {"codigoIot": "QA-1011230954-NO", "ubicacion": "QA", "idTipoPermitido": 1}
+  respuesta: 403 en 14 ms
+  {"error": "FORBIDDEN", "mensaje": "Sin permisos para esta operación"}
+
+[S2-RBAC-03] 23:09:54.872  GET /api/v1/analitica/embed-token  (usuario A)
+  respuesta: 403 en 10 ms
+  {"error": "FORBIDDEN", "mensaje": "Sin permisos para esta operación"}
+
+[S2-RBAC-04] 23:09:54.883  GET /api/v1/tickets  (usuario A)
+  respuesta: 403 en 11 ms
+  {"error": "FORBIDDEN", "mensaje": "Sin permisos para esta operación"}
+
+[S2-RBAC-05] 23:09:54.905  GET /api/v1/vehiculos/usuario/22  (usuario A)
+  respuesta: 403 en 22 ms
+  {"error": "FORBIDDEN", "mensaje": "No puedes acceder a recursos de otro usuario"}
+
+[S2-RBAC-06] 23:09:54.922  GET /api/v1/transacciones/usuario/22  (usuario A)
+  respuesta: 403 en 16 ms
+  {"error": "FORBIDDEN", "mensaje": "No puedes acceder a recursos de otro usuario"}
+
+[S2-RBAC-07] 23:09:54.935  GET /api/v1/reservas/usuario/22  (usuario A)
+  respuesta: 403 en 13 ms
+  {"error": "FORBIDDEN", "mensaje": "No puedes acceder a recursos de otro usuario"}
+
+[S2-RBAC-08] 23:09:54.944  GET /api/v1/usuarios  (colaborador)
+  respuesta: 403 en 9 ms
+  {"error": "FORBIDDEN", "mensaje": "Sin permisos para esta operación"}
+
+[S2-RBAC-09] 23:09:55.001  GET /api/v1/usuarios  (administrador)
+  respuesta: 200 en 56 ms
+  [{"idUsuario": 1, "rut": "17234567-K", "nombreCompleto": "Camila Soto", "emailInstitucional": "csoto@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 2, "rut": "16444333-2", "nombreCompleto": "Joaquin Castillo", "emailInstitucional": "jcastillo@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 3, "rut": "15888999-5", "nombreCompleto": "Ignacio Castro", "emailInstitucional": "icastro@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 4, "rut": "19876543-2", "nombreCompleto": "Matias Munoz", "emailInstitucional": "mmunoz@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 5, "rut": "20123456-7", "nombreCompleto": "Sofia Silva", "emailInstitucional": "ssilva@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 6, "rut": "21345678-9", "nombreCompleto": "Lucas Perez", "emailInstitucional": "lperez@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 7, "rut": "19999888-3", "nombreCompleto": "Diego Torres", "emailInstitucional": "dtorres@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 8, "rut": "20555444-K", "nombreCompleto": "Antonia Flores", "emailInstitucional": "aflores@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 9, "rut": "21111222-3", "nombreCompleto": "Isidora Vega", "emailInstitucional": "ivega@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 10, "rut": "208887 ... (recortado)
+
+[S2-RBAC-10] 23:09:55.011  PUT /api/v1/usuarios/21  (usuario A)
+  envio: {"idRol": 1}
+  respuesta: 403 en 10 ms
+  {"error": "FORBIDDEN", "mensaje": "Sin permisos para esta operación"}
+
+[S2-BAH-01] 23:09:55.062  GET /api/v1/bahias  (usuario A)
+  respuesta: 200 en 51 ms
+  [{"idBahia": 1, "codigoIot": "RACK-BICI-01", "ubicacion": "Sede Maipu - Acceso Norte", "idEstado": 1, "idTipoPermitido": 1}, {"idBahia": 2, "codigoIot": "RACK-BICI-02", "ubicacion": "Sede Maipu - Acceso Norte", "idEstado": 4, "idTipoPermitido": 1}, {"idBahia": 3, "codigoIot": "RACK-SCOOT-01", "ubicacion": "Sede Maipu - Patio Central", "idEstado": 3, "idTipoPermitido": 2}, {"idBahia": 4, "codigoIot": "RACK-SCOOT-02", "ubicacion": "Sede Maipu - Patio Central", "idEstado": 1, "idTipoPermitido": 2}]
+
+[S2-BAH-06] 23:09:55.157  POST /api/v1/bahias  (administrador)
+  envio: {"codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 1, "direccionMac": "0A:1E:C3:D5:B6:78"}
+  respuesta: 201 en 94 ms
+  {"idBahia": 5, "mensaje": "Bahía creada"}
+
+[PREPARACION] 23:09:55.205  POST /api/v1/bahias  (administrador)
+  envio: {"codigoIot": "QA-1011230954-B2", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 2, "direccionMac": "0A:3A:06:0F:10:E3"}
+  respuesta: 201 en 49 ms
+  {"idBahia": 6, "mensaje": "Bahía creada"}
+
+[S2-BAH-07] 23:09:55.229  POST /api/v1/bahias  (administrador)
+  envio: {"codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954", "idTipoPermitido": 1}
+  respuesta: 409 en 23 ms
+  {"error": "CONFLICT", "mensaje": "Ya existe una bahía con ese codigoIot"}
+
+[S2-BAH-08] 23:09:55.256  POST /api/v1/bahias  (administrador)
+  envio: {"codigoIot": "QA-1011230954-B9", "ubicacion": "QA Patio 1011230954", "idTipoPermitido": 999}
+  respuesta: 400 en 28 ms
+  {"error": "BAD_REQUEST", "mensaje": "idTipoPermitido inválido"}
+
+[S2-BAH-02] 23:09:55.285  GET /api/v1/bahias?idEstado=1&idTipoPermitido=1  (usuario A)
+  respuesta: 200 en 29 ms
+  [{"idBahia": 1, "codigoIot": "RACK-BICI-01", "ubicacion": "Sede Maipu - Acceso Norte", "idEstado": 1, "idTipoPermitido": 1}, {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 1}]
+
+[S2-BAH-03] 23:09:55.319  GET /api/v1/bahias?ubicacion=qa+patio+1011230954  (usuario A)
+  respuesta: 200 en 34 ms
+  [{"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 1}, {"idBahia": 6, "codigoIot": "QA-1011230954-B2", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 2}]
+
+[S2-BAH-04] 23:09:55.347  GET /api/v1/bahias/codigo/QA-1011230954-B1  (usuario A)
+  respuesta: 200 en 27 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-BAH-05] 23:09:55.366  GET /api/v1/bahias/codigo/QA-1011230954-NOEXISTE  (usuario A)
+  respuesta: 404 en 19 ms
+  {"error": "NOT_FOUND", "mensaje": "No existe una bahía con código QA-1011230954-NOEXISTE"}
+
+[S2-BAH-09] 23:09:55.429  PUT /api/v1/bahias/5  (administrador)
+  envio: {"ubicacion": "QA Patio 1011230954 - Norte"}
+  respuesta: 200 en 64 ms
+  {"idBahia": 5, "mensaje": "Bahía actualizada"}
+
+[S2-BAH-09] 23:09:55.452  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 23 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-BAH-10] 23:09:55.472  PUT /api/v1/bahias/5  (administrador)
+  envio: {"idEstado": 9}
+  respuesta: 400 en 20 ms
+  {"error": "BAD_REQUEST", "mensaje": "idEstado inválido"}
+
+[S2-BAH-13] 23:09:55.494  PUT /api/v1/bahias/5  (administrador)
+  envio: {"idEstado": 4}
+  respuesta: 200 en 22 ms
+  {"idBahia": 5, "mensaje": "Bahía actualizada"}
+
+[S2-BAH-13] 23:09:55.523  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 29 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 4, "idTipoPermitido": 1}
+
+[S2-BAH-11] 23:09:55.610  PUT /api/v1/bahias/5  (administrador)
+  envio: {"idEstado": 1}
+  respuesta: 200 en 87 ms
+  {"idBahia": 5, "mensaje": "Bahía actualizada"}
+
+[S2-BAH-11] 23:09:55.639  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 29 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-VEH-01] 23:09:55.677  POST /api/v1/vehiculos  (usuario A)
+  envio: {"idTipoVehiculo": 1, "identificador": "QA Bicicleta A 1011230954"}
+  respuesta: 201 en 37 ms
+  {"idVehiculo": 15, "mensaje": "Vehículo registrado exitosamente"}
+
+[PREPARACION] 23:09:55.707  POST /api/v1/vehiculos  (usuario A)
+  envio: {"idTipoVehiculo": 2, "identificador": "QA Scooter A 1011230954"}
+  respuesta: 201 en 30 ms
+  {"idVehiculo": 16, "mensaje": "Vehículo registrado exitosamente"}
+
+[PREPARACION] 23:09:55.738  POST /api/v1/vehiculos  (usuario A)
+  envio: {"idTipoVehiculo": 1, "identificador": "QA Temporal A 1011230954"}
+  respuesta: 201 en 31 ms
+  {"idVehiculo": 17, "mensaje": "Vehículo registrado exitosamente"}
+
+[PREPARACION] 23:09:55.764  POST /api/v1/vehiculos  (usuario B)
+  envio: {"idTipoVehiculo": 1, "identificador": "QA Bicicleta B 1011230954"}
+  respuesta: 201 en 26 ms
+  {"idVehiculo": 18, "mensaje": "Vehículo registrado exitosamente"}
+
+[S2-VEH-02] 23:09:55.781  POST /api/v1/vehiculos  (usuario A)
+  envio: {"idTipoVehiculo": 999, "identificador": "QA tipo malo"}
+  respuesta: 400 en 16 ms
+  {"error": "BAD_REQUEST", "mensaje": "idTipoVehiculo inválido"}
+
+[S2-VEH-03] 23:09:55.792  POST /api/v1/vehiculos  (usuario A)
+  envio: {"idTipoVehiculo": 1}
+  respuesta: 400 en 11 ms
+  {"error": "BAD_REQUEST", "mensaje": "identificador: no debe estar vacío"}
+
+[S2-VEH-04] 23:09:55.842  GET /api/v1/vehiculos/usuario/21  (usuario A)
+  respuesta: 200 en 50 ms
+  [{"idVehiculo": 15, "idTipoVehiculo": 1, "nombreTipo": "BICICLETA", "identificador": "QA Bicicleta A 1011230954"}, {"idVehiculo": 16, "idTipoVehiculo": 2, "nombreTipo": "SCOOTER", "identificador": "QA Scooter A 1011230954"}, {"idVehiculo": 17, "idTipoVehiculo": 1, "nombreTipo": "BICICLETA", "identificador": "QA Temporal A 1011230954"}]
+
+[S2-VEH-05] 23:09:55.882  DELETE /api/v1/vehiculos/15  (usuario B)
+  respuesta: 403 en 40 ms
+  {"error": "FORBIDDEN", "mensaje": "No puedes acceder a recursos de otro usuario"}
+
+[S2-VEH-06] 23:09:55.913  DELETE /api/v1/vehiculos/17  (usuario A)
+  respuesta: 204 en 31 ms
+
+[S2-VEH-06] 23:09:55.954  GET /api/v1/vehiculos/usuario/21  (usuario A)
+  respuesta: 200 en 40 ms
+  [{"idVehiculo": 15, "idTipoVehiculo": 1, "nombreTipo": "BICICLETA", "identificador": "QA Bicicleta A 1011230954"}, {"idVehiculo": 16, "idTipoVehiculo": 2, "nombreTipo": "SCOOTER", "identificador": "QA Scooter A 1011230954"}]
+
+[S2-VEH-07] 23:09:55.979  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 5, "idVehiculo": 17}
+  respuesta: 400 en 25 ms
+  {"error": "BAD_REQUEST", "mensaje": "El vehículo no pertenece al usuario o está inactivo"}
+
+[S2-RES-01] 23:09:56.028  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 5, "idVehiculo": 16}
+  respuesta: 409 en 50 ms
+  {"error": "CONFLICT", "mensaje": "La bahía no es compatible con el tipo de tu vehículo"}
+
+[S2-RES-02] 23:09:56.052  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 5, "idVehiculo": 18}
+  respuesta: 400 en 24 ms
+  {"error": "BAD_REQUEST", "mensaje": "El vehículo no pertenece al usuario o está inactivo"}
+
+[S2-RES-03] 23:09:56.092  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 999999999, "idVehiculo": 15}
+  respuesta: 404 en 40 ms
+  {"error": "NOT_FOUND", "mensaje": "Bahía no encontrada"}
+
+[S2-RES-05] 23:09:56.151  POST /api/v1/reservas  (usuario B)
+  envio: {"idBahia": 5, "idVehiculo": 18}
+  respuesta: 201 en 58 ms
+  {"idReserva": 493, "idUsuario": 22, "idBahia": 5, "idVehiculo": 18, "fechaSolicitud": "2026-10-12T02:09:56.128916488Z", "fechaExpiracion": "2026-10-12T02:24:56.128916488Z", "estadoReserva": "PENDIENTE"}
+
+[S2-RES-05] 23:09:56.153  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 5, "idVehiculo": 15}
+  respuesta: 409 en 60 ms
+  {"error": "CONFLICT", "mensaje": "La bahía no está disponible"}
+
+[S2-RES-05] 23:09:56.174  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 20 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 2, "idTipoPermitido": 1}
+
+[S2-RES-06] 23:09:56.223  PUT /api/v1/reservas/493/cancelar  (usuario B)
+  respuesta: 200 en 50 ms
+  {"idReserva": 493, "estadoReserva": "CANCELADA"}
+
+[S2-RES-06] 23:09:56.242  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 19 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-RES-07] 23:09:56.260  PUT /api/v1/reservas/493/cancelar  (usuario B)
+  respuesta: 409 en 18 ms
+  {"error": "CONFLICT", "mensaje": "Solo se pueden cancelar reservas PENDIENTES (actual: CANCELADA)"}
+
+[S2-RES-08] 23:09:56.322  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 5, "idVehiculo": 15}
+  respuesta: 201 en 61 ms
+  {"idReserva": 494, "idUsuario": 21, "idBahia": 5, "idVehiculo": 15, "fechaSolicitud": "2026-10-12T02:09:56.302998706Z", "fechaExpiracion": "2026-10-12T02:24:56.302998706Z", "estadoReserva": "PENDIENTE"}
+
+[S2-RES-08] 23:09:56.346  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 20 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 2, "idTipoPermitido": 1}
+
+[S2-RES-04] 23:09:56.394  POST /api/v1/reservas  (usuario B)
+  envio: {"idBahia": 5, "idVehiculo": 18}
+  respuesta: 409 en 48 ms
+  {"error": "CONFLICT", "mensaje": "La bahía no está disponible"}
+
+[S3-DEF-04] 23:09:56.437  PUT /api/v1/bahias/5  (administrador)
+  envio: {"idEstado": 1}
+  respuesta: 409 en 43 ms
+  {"error": "CONFLICT", "mensaje": "La bahía tiene una reserva pendiente; cancélala antes de dejarla disponible"}
+
+[S3-DEF-04] 23:09:56.461  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 24 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 2, "idTipoPermitido": 1}
+
+[S2-RES-09] 23:09:56.503  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 5, "idVehiculo": 15}
+  respuesta: 409 en 42 ms
+  {"error": "CONFLICT", "mensaje": "Ya tienes una reserva pendiente"}
+
+[S2-RES-10] 23:09:56.536  GET /api/v1/reservas/usuario/21  (usuario A)
+  respuesta: 200 en 33 ms
+  [{"idReserva": 494, "idUsuario": 21, "idBahia": 5, "idVehiculo": 15, "fechaSolicitud": "2026-10-12T02:09:56.302999Z", "fechaExpiracion": "2026-10-12T02:24:56.302999Z", "estadoReserva": "PENDIENTE"}]
+
+[S2-RES-11] 23:09:56.555  PUT /api/v1/reservas/494/cancelar  (usuario B)
+  respuesta: 403 en 19 ms
+  {"error": "FORBIDDEN", "mensaje": "No puedes acceder a recursos de otro usuario"}
+
+[S2-RES-12] 23:09:56.575  DELETE /api/v1/reservas/494  (administrador)
+  respuesta: 404 en 21 ms
+  {"type": "about:blank", "title": "Not Found", "status": 404, "detail": "No static resource api/v1/reservas/494.", "instance": "/api/v1/reservas/494"}
+
+[S2-RES-12] 23:09:56.605  GET /api/v1/reservas/usuario/21  (administrador)
+  respuesta: 200 en 29 ms
+  [{"idReserva": 494, "idUsuario": 21, "idBahia": 5, "idVehiculo": 15, "fechaSolicitud": "2026-10-12T02:09:56.302999Z", "fechaExpiracion": "2026-10-12T02:24:56.302999Z", "estadoReserva": "PENDIENTE"}]
+
+[S2-TX-01] 23:09:56.626  POST /api/v1/transacciones/iniciar  (usuario B)
+  envio: {"idReserva": 494}
+  respuesta: 403 en 21 ms
+  {"error": "FORBIDDEN", "mensaje": "La reserva pertenece a otro usuario"}
+
+[S2-TX-02] 23:09:56.643  POST /api/v1/transacciones/iniciar  (usuario A)
+  envio: {"idReserva": 999999999}
+  respuesta: 404 en 17 ms
+  {"error": "NOT_FOUND", "mensaje": "Reserva no encontrada"}
+
+[S2-TX-03] 23:09:56.654  POST /api/v1/transacciones/iniciar  (usuario A)
+  envio: {}
+  respuesta: 400 en 11 ms
+  {"error": "BAD_REQUEST", "mensaje": "idReserva: no debe ser nulo"}
+
+[S2-TX-04] 23:09:56.677  POST /api/v1/transacciones/iniciar  (usuario A)
+  envio: {"idReserva": 494, "idBahia": 6}
+  respuesta: 409 en 22 ms
+  {"error": "CONFLICT", "mensaje": "El QR escaneado no corresponde a la bahía reservada"}
+
+[S2-TX-04] 23:09:56.695  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 19 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 2, "idTipoPermitido": 1}
+
+[S2-TX-05] 23:09:56.810  POST /api/v1/transacciones/iniciar  (usuario A)
+  envio: {"idReserva": 494, "idBahia": 5, "idVehiculo": 15}
+  respuesta: 200 en 115 ms
+  {"idTransaccion": 797, "fechaInicio": "2026-10-12T02:09:56.778149033Z", "estadoTransaccion": "ACTIVA"}
+
+[S2-TX-05] 23:09:56.842  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 31 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 3, "idTipoPermitido": 1}
+
+[S2-TX-05] 23:09:56.869  GET /api/v1/reservas/usuario/21  (usuario A)
+  respuesta: 200 en 27 ms
+  []
+
+[S2-TX-06] 23:09:56.891  POST /api/v1/transacciones/iniciar  (usuario A)
+  envio: {"idReserva": 494}
+  respuesta: 409 en 23 ms
+  {"error": "CONFLICT", "mensaje": "La reserva no está pendiente (estado actual: CONCRETADA)"}
+
+[S2-TX-07] 23:09:56.914  PUT /api/v1/reservas/494/cancelar  (usuario A)
+  respuesta: 409 en 22 ms
+  {"error": "CONFLICT", "mensaje": "Solo se pueden cancelar reservas PENDIENTES (actual: CONCRETADA)"}
+
+[S2-TX-08] 23:09:56.955  POST /api/v1/reservas  (usuario B)
+  envio: {"idBahia": 5, "idVehiculo": 18}
+  respuesta: 409 en 41 ms
+  {"error": "CONFLICT", "mensaje": "La bahía no está disponible"}
+
+[S2-TX-09] 23:09:56.984  POST /api/v1/transacciones/797/finalizar  (usuario B)
+  respuesta: 403 en 29 ms
+  {"error": "FORBIDDEN", "mensaje": "No puedes acceder a recursos de otro usuario"}
+
+[S2-TX-10] 23:09:57.054  POST /api/v1/transacciones/797/finalizar  (usuario A)
+  respuesta: 200 en 70 ms
+  {"idTransaccion": 797, "fechaInicio": "2026-10-12T02:09:56.778149Z", "fechaFin": "2026-10-12T02:09:57.015834108Z", "estadoTransaccion": "FINALIZADA"}
+
+[S2-TX-10] 23:09:57.075  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 21 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-TX-11] 23:09:57.095  POST /api/v1/transacciones/797/finalizar  (usuario A)
+  respuesta: 409 en 20 ms
+  {"error": "CONFLICT", "mensaje": "La transacción no está activa"}
+
+[S2-TX-12] 23:09:57.177  GET /api/v1/transacciones/usuario/21  (usuario A)
+  respuesta: 200 en 82 ms
+  [{"idTransaccion": 797, "idReserva": 494, "idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idVehiculo": 15, "vehiculo": "QA Bicicleta A 1011230954", "fechaInicio": "2026-10-12T02:09:56.778149Z", "fechaFin": "2026-10-12T02:09:57.015834Z", "minutos": 0, "estadoTransaccion": "FINALIZADA"}]
+
+[S2-TX-13] 23:09:57.189  DELETE /api/v1/transacciones/797  (administrador)
+  respuesta: 404 en 11 ms
+  {"type": "about:blank", "title": "Not Found", "status": 404, "detail": "No static resource api/v1/transacciones/797.", "instance": "/api/v1/transacciones/797"}
+
+[S2-TX-13] 23:09:57.236  GET /api/v1/transacciones/usuario/21  (administrador)
+  respuesta: 200 en 47 ms
+  [{"idTransaccion": 797, "idReserva": 494, "idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idVehiculo": 15, "vehiculo": "QA Bicicleta A 1011230954", "fechaInicio": "2026-10-12T02:09:56.778149Z", "fechaFin": "2026-10-12T02:09:57.015834Z", "minutos": 0, "estadoTransaccion": "FINALIZADA"}]
+
+[PREPARACION] 23:09:57.255  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 19 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-TKT-01] 23:09:57.295  POST /api/v1/tickets  (usuario A)
+  envio: {"idBahia": 5, "descripcionFalla": "QA regresion 1011230954: candado de prueba trabado"}
+  respuesta: 201 en 40 ms
+  {"mensaje": "Ticket registrado", "idTicket": 13}
+
+[S2-TKT-01] 23:09:57.312  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 18 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 4, "idTipoPermitido": 1}
+
+[S2-TKT-03] 23:09:57.325  POST /api/v1/tickets  (usuario A)
+  envio: {"idBahia": 5}
+  respuesta: 400 en 13 ms
+  {"error": "BAD_REQUEST", "mensaje": "descripcionFalla: no debe estar vacío"}
+
+[S2-TKT-06] 23:09:57.353  PUT /api/v1/tickets/999999999  (administrador)
+  envio: {"estadoTicket": "EN_REVISION"}
+  respuesta: 404 en 28 ms
+  {"error": "NOT_FOUND", "mensaje": "Ticket no encontrado"}
+
+[S2-TKT-07] 23:09:57.395  GET /api/v1/tickets?estado=ABIERTO  (administrador)
+  respuesta: 200 en 41 ms
+  [{"idTicket": 13, "idBahia": 5, "reportadoPor": 21, "descripcionFalla": "QA regresion 1011230954: candado de prueba trabado", "fechaReporte": "2026-10-12T02:09:57.273418Z", "estadoTicket": "ABIERTO"}, {"idTicket": 1, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Candado trabado: el cerrojo no libera la bicicleta", "fechaReporte": "2026-10-11T20:31:02.743886Z", "estadoTicket": "ABIERTO"}]
+
+[S2-TKT-05] 23:09:57.427  PUT /api/v1/tickets/13  (administrador)
+  envio: {"estadoTicket": "EN_REVISION"}
+  respuesta: 200 en 32 ms
+  {"mensaje": "Ticket actualizado", "idTicket": 13}
+
+[S2-TKT-05] 23:09:57.472  GET /api/v1/tickets  (administrador)
+  respuesta: 200 en 46 ms
+  [{"idTicket": 13, "idBahia": 5, "reportadoPor": 21, "descripcionFalla": "QA regresion 1011230954: candado de prueba trabado", "fechaReporte": "2026-10-12T02:09:57.273418Z", "estadoTicket": "EN_REVISION"}, {"idTicket": 1, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Candado trabado: el cerrojo no libera la bicicleta", "fechaReporte": "2026-10-11T20:31:02.743886Z", "estadoTicket": "ABIERTO"}, {"idTicket": 2, "idBahia": 1, "reportadoPor": 17, "descripcionFalla": "Sensor de ocupacion con lecturas erraticas", "fechaReporte": "2026-09-18T13:00:00Z", "fechaResolucion": "2026-09-19T18:30:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 12, "idBahia": 3, "reportadoPor": 20, "descripcionFalla": "Reportado por error: la falla era del candado del usuario", "fechaReporte": "2026-09-15T11:40:00Z", "estadoTicket": "ANULADO"}, {"idTicket": 11, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Sensor de ocupacion no detecta el vehiculo", "fechaReporte": "2026-09-09T13:00:00Z", "fechaResolucion": "2026-09-09T16:20:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 10, "idBahia": 4, "reportadoPor": 19, "descripcionFalla": "Estructura del rack suelta", "fechaReporte": "2026-09-02T21:30:00Z", "fechaResolucion": "2026-09-03T14:15:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 9, "idBahia": 1, "reportadoPor": 18, "descripcionFalla": "Dispositivo con fallas de conexion", "fechaReporte": "2026-08-27T12:05:00Z", "fechaResolucion": "2026-08-28T13:30:00Z", "estadoTicket": "RESUELTO"}, {"idTi ... (recortado)
+
+[S2-TKT-05] 23:09:57.492  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 20 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 4, "idTipoPermitido": 1}
+
+[S3-DEF-04B] 23:09:57.569  PUT /api/v1/bahias/5  (administrador)
+  envio: {"idEstado": 1}
+  respuesta: 409 en 77 ms
+  {"error": "CONFLICT", "mensaje": "La bahía tiene un ticket de mantención abierto; resuélvelo antes de dejarla disponible"}
+
+[S3-DEF-04B] 23:09:57.588  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 19 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 4, "idTipoPermitido": 1}
+
+[S2-TKT-04] 23:09:57.607  PUT /api/v1/tickets/13  (administrador)
+  envio: {"estadoTicket": "INVENTADO"}
+  respuesta: 400 en 19 ms
+  {"error": "BAD_REQUEST", "mensaje": "estadoTicket inválido: [RESUELTO, ABIERTO, EN_REVISION, ANULADO]"}
+
+[S2-TKT-08] 23:09:57.661  PUT /api/v1/tickets/13  (administrador)
+  envio: {"estadoTicket": "RESUELTO"}
+  respuesta: 200 en 54 ms
+  {"mensaje": "Ticket actualizado", "idTicket": 13}
+
+[S2-TKT-08] 23:09:57.702  GET /api/v1/tickets  (administrador)
+  respuesta: 200 en 41 ms
+  [{"idTicket": 13, "idBahia": 5, "reportadoPor": 21, "descripcionFalla": "QA regresion 1011230954: candado de prueba trabado", "fechaReporte": "2026-10-12T02:09:57.273418Z", "fechaResolucion": "2026-10-12T02:09:57.623421Z", "estadoTicket": "RESUELTO"}, {"idTicket": 1, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Candado trabado: el cerrojo no libera la bicicleta", "fechaReporte": "2026-10-11T20:31:02.743886Z", "estadoTicket": "ABIERTO"}, {"idTicket": 2, "idBahia": 1, "reportadoPor": 17, "descripcionFalla": "Sensor de ocupacion con lecturas erraticas", "fechaReporte": "2026-09-18T13:00:00Z", "fechaResolucion": "2026-09-19T18:30:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 12, "idBahia": 3, "reportadoPor": 20, "descripcionFalla": "Reportado por error: la falla era del candado del usuario", "fechaReporte": "2026-09-15T11:40:00Z", "estadoTicket": "ANULADO"}, {"idTicket": 11, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Sensor de ocupacion no detecta el vehiculo", "fechaReporte": "2026-09-09T13:00:00Z", "fechaResolucion": "2026-09-09T16:20:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 10, "idBahia": 4, "reportadoPor": 19, "descripcionFalla": "Estructura del rack suelta", "fechaReporte": "2026-09-02T21:30:00Z", "fechaResolucion": "2026-09-03T14:15:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 9, "idBahia": 1, "reportadoPor": 18, "descripcionFalla": "Dispositivo con fallas de conexion", "fechaReporte": "2026-08-27T12:05:00Z", "fechaResolucion": "2026-08-28T ... (recortado)
+
+[S2-TKT-08] 23:09:57.719  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 17 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-TKT-02] 23:09:57.748  POST /api/v1/tickets  (administrador)
+  envio: {"idBahia": 5, "descripcionFalla": "QA regresion 1011230954: ticket para anular"}
+  respuesta: 201 en 29 ms
+  {"mensaje": "Ticket registrado", "idTicket": 14}
+
+[S2-TKT-02] 23:09:57.774  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 26 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 4, "idTipoPermitido": 1}
+
+[S2-TKT-09] 23:09:57.796  POST /api/v1/tickets  (administrador)
+  envio: {"idBahia": 999999999, "descripcionFalla": "QA bahia inexistente"}
+  respuesta: 404 en 21 ms
+  {"error": "NOT_FOUND", "mensaje": "Bahía no encontrada"}
+
+[S2-TKT-10] 23:09:57.844  DELETE /api/v1/tickets/14  (administrador)
+  respuesta: 204 en 48 ms
+
+[S2-TKT-10] 23:09:57.884  GET /api/v1/tickets  (administrador)
+  respuesta: 200 en 39 ms
+  [{"idTicket": 14, "idBahia": 5, "reportadoPor": 1, "descripcionFalla": "QA regresion 1011230954: ticket para anular", "fechaReporte": "2026-10-12T02:09:57.731723Z", "estadoTicket": "ANULADO"}, {"idTicket": 13, "idBahia": 5, "reportadoPor": 21, "descripcionFalla": "QA regresion 1011230954: candado de prueba trabado", "fechaReporte": "2026-10-12T02:09:57.273418Z", "fechaResolucion": "2026-10-12T02:09:57.623421Z", "estadoTicket": "RESUELTO"}, {"idTicket": 1, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Candado trabado: el cerrojo no libera la bicicleta", "fechaReporte": "2026-10-11T20:31:02.743886Z", "estadoTicket": "ABIERTO"}, {"idTicket": 2, "idBahia": 1, "reportadoPor": 17, "descripcionFalla": "Sensor de ocupacion con lecturas erraticas", "fechaReporte": "2026-09-18T13:00:00Z", "fechaResolucion": "2026-09-19T18:30:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 12, "idBahia": 3, "reportadoPor": 20, "descripcionFalla": "Reportado por error: la falla era del candado del usuario", "fechaReporte": "2026-09-15T11:40:00Z", "estadoTicket": "ANULADO"}, {"idTicket": 11, "idBahia": 2, "reportadoPor": 16, "descripcionFalla": "Sensor de ocupacion no detecta el vehiculo", "fechaReporte": "2026-09-09T13:00:00Z", "fechaResolucion": "2026-09-09T16:20:00Z", "estadoTicket": "RESUELTO"}, {"idTicket": 10, "idBahia": 4, "reportadoPor": 19, "descripcionFalla": "Estructura del rack suelta", "fechaReporte": "2026-09-02T21:30:00Z", "fechaResolucion": "2026-09-03T14:15:00Z", "estadoTicket":  ... (recortado)
+
+[S2-TKT-10] 23:09:57.901  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 17 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 1, "idTipoPermitido": 1}
+
+[S2-USR-01] 23:09:57.954  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "26896418-0", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "qa.c.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>", "idRol": 2}
+  respuesta: 201 en 53 ms
+  {"mensaje": "Usuario creado", "idUsuario": 24}
+
+[S2-USR-02] 23:09:57.972  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "26896418-0", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "qa.c2.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>", "idRol": 2}
+  respuesta: 409 en 17 ms
+  {"error": "CONFLICT", "mensaje": "Ya existe un usuario con ese RUT"}
+
+[S2-USR-03] 23:09:58.004  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "22162619-1", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "QA.C.1011230954@DUOCUC.CL", "passwordPrototipo": "<oculto>", "idRol": 2}
+  respuesta: 409 en 32 ms
+  {"error": "CONFLICT", "mensaje": "Ya existe un usuario con ese email"}
+
+[S2-USR-04] 23:09:58.018  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "63368909-1", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "qa.c4.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>", "idRol": 9}
+  respuesta: 400 en 14 ms
+  {"error": "BAD_REQUEST", "mensaje": "idRol inválido (1=Admin, 2=Usuario, 3=Colaborador)"}
+
+[S2-USR-05] 23:09:58.029  POST /api/v1/usuarios  (administrador)
+  envio: {"rut": "24505797-3", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "no-es-un-correo", "passwordPrototipo": "<oculto>", "idRol": 2}
+  respuesta: 400 en 11 ms
+  {"error": "BAD_REQUEST", "mensaje": "emailInstitucional: debe ser una dirección de correo electrónico con formato correcto"}
+
+[S2-USR-13] 23:09:58.049  PUT /api/v1/usuarios/999999999  (administrador)
+  envio: {"nombreCompleto": "QA no existe"}
+  respuesta: 404 en 19 ms
+  {"error": "NOT_FOUND", "mensaje": "Usuario no encontrado"}
+
+[S2-USR-12] 23:09:58.061  DELETE /api/v1/usuarios/1  (administrador)
+  respuesta: 409 en 12 ms
+  {"error": "CONFLICT", "mensaje": "No puedes desactivar tu propio usuario"}
+
+[S2-USR-12] 23:09:58.076  GET /api/v1/auth/me  (administrador)
+  respuesta: 200 en 15 ms
+  {"idUsuario": 1, "rut": "17234567-K", "nombreCompleto": "Camila Soto", "emailInstitucional": "csoto@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}
+
+[S2-USR-06] 23:09:58.101  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.c.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 25 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 24, "rut": "26896418-0", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "qa.c.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}}
+
+[S2-USR-07] 23:09:58.145  PUT /api/v1/usuarios/24  (administrador)
+  envio: {"estadoSincronizacion": "BLOQUEADO"}
+  respuesta: 200 en 44 ms
+  {"mensaje": "Usuario actualizado", "idUsuario": 24}
+
+[S2-USR-07] 23:09:58.165  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.c.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 403 en 21 ms
+  {"error": "FORBIDDEN", "mensaje": "Usuario bloqueado: acceso denegado"}
+
+[S2-USR-08] 23:09:58.175  GET /api/v1/auth/me  (usuario C)
+  respuesta: 401 en 10 ms
+  {"error": "UNAUTHORIZED", "mensaje": "No autenticado o token inválido/expirado"}
+
+[S2-USR-09] 23:09:58.194  PUT /api/v1/usuarios/24  (administrador)
+  envio: {"estadoSincronizacion": "RARO"}
+  respuesta: 400 en 19 ms
+  {"error": "BAD_REQUEST", "mensaje": "estadoSincronizacion inválido: [BLOQUEADO, INACTIVO, VIGENTE]"}
+
+[S2-USR-10] 23:09:58.216  PUT /api/v1/usuarios/24  (administrador)
+  envio: {"estadoSincronizacion": "VIGENTE", "idRol": 3}
+  respuesta: 200 en 22 ms
+  {"mensaje": "Usuario actualizado", "idUsuario": 24}
+
+[S2-USR-10] 23:09:58.242  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.c.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 200 en 26 ms
+  {"token": "<oculto>", "usuario": {"idUsuario": 24, "rut": "26896418-0", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "qa.c.1011230954@duocuc.cl", "idRol": 3, "estadoSincronizacion": "VIGENTE"}}
+
+[S2-USR-11] 23:09:58.265  DELETE /api/v1/usuarios/24  (administrador)
+  respuesta: 204 en 22 ms
+
+[S2-USR-11] 23:09:58.300  GET /api/v1/usuarios  (administrador)
+  respuesta: 200 en 35 ms
+  [{"idUsuario": 21, "rut": "81359178-9", "nombreCompleto": "QA Regresion A (ignorar)", "emailInstitucional": "qa.a.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 22, "rut": "14971286-6", "nombreCompleto": "QA Regresion B (ignorar)", "emailInstitucional": "qa.b.1011230954@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 23, "rut": "37547846-5", "nombreCompleto": "QA Regresion COLAB (ignorar)", "emailInstitucional": "qa.colab.1011230954@duocuc.cl", "idRol": 3, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 24, "rut": "26896418-0", "nombreCompleto": "QA Regresion C (ignorar)", "emailInstitucional": "qa.c.1011230954@duocuc.cl", "idRol": 3, "estadoSincronizacion": "INACTIVO"}, {"idUsuario": 1, "rut": "17234567-K", "nombreCompleto": "Camila Soto", "emailInstitucional": "csoto@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 2, "rut": "16444333-2", "nombreCompleto": "Joaquin Castillo", "emailInstitucional": "jcastillo@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 3, "rut": "15888999-5", "nombreCompleto": "Ignacio Castro", "emailInstitucional": "icastro@duocuc.cl", "idRol": 1, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 4, "rut": "19876543-2", "nombreCompleto": "Matias Munoz", "emailInstitucional": "mmunoz@duocuc.cl", "idRol": 2, "estadoSincronizacion": "VIGENTE"}, {"idUsuario": 5, "rut": "20123456-7", "nombreCompleto": "Sofia Silva", "emailInstitucional": "ssil ... (recortado)
+
+[S2-USR-11] 23:09:58.320  POST /api/v1/auth/login  (sin token)
+  envio: {"emailInstitucional": "qa.c.1011230954@duocuc.cl", "passwordPrototipo": "<oculto>"}
+  respuesta: 403 en 19 ms
+  {"error": "FORBIDDEN", "mensaje": "Usuario inactivo: acceso denegado"}
+
+[S2-DOC-01] 23:09:58.328  GET /swagger-ui.html  (sin token)
+  cabeceras: Accept
+  respuesta: 200 en 8 ms
+  <!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="ic
+
+[S2-DOC-01] 23:09:58.330  GET /v3/api-docs  (sin token)
+  respuesta: 200 en 2 ms
+  {"openapi": "3.0.1", "info": {"title": "OpenAPI definition", "version": "v0"}, "servers": [{"url": "http://localhost:8080", "description": "Generated server url"}], "paths": {"/api/v1/usuarios/{id}": {"put": {"tags": ["usuario-controller"], "operationId": "actualizar", "parameters": [{"name": "id", "in": "path", "required": true, "schema": {"type": "integer", "format": "int64"}}], "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/UsuarioUpdate"}}}, "required": true}, "responses": {"200": {"description": "OK", "content": {"*/*": {"schema": {"type": "object", "additionalProperties": {"type": "object"}}}}}}}, "delete": {"tags": ["usuario-controller"], "operationId": "eliminar_1", "parameters": [{"name": "id", "in": "path", "required": true, "schema": {"type": "integer", "format": "int64"}}], "responses": {"200": {"description": "OK"}}}}, "/api/v1/tickets/{id}": {"put": {"tags": ["ticket-controller"], "operationId": "actualizar_1", "parameters": [{"name": "id", "in": "path", "required": true, "schema": {"type": "integer", "format": "int64"}}], "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/TicketUpdate"}}}, "required": true}, "responses": {"200": {"description": "OK", "content": {"*/*": {"schema": {"type": "object", "additionalProperties": {"type": "object"}}}}}}}, "delete": {"tags": ["ticket-controller"], "operationId": "eliminar_2", "parameters": [{"name": "id", "in": "path", "required": true, "s ... (recortado)
+
+[S3-IOT-01] 23:09:58.335  POST /api/v1/iot/telemetria  (sin token)
+  envio: {"direccionMac": "0A:3A:06:0F:10:E3", "tipoEvento": "LECTURA_SENSOR", "payloadRecibido": "{\"candadoCerrado\": true, \"bateria\": 80, \"estadoConexion\": \"ONLINE\"}"}
+  respuesta: 401 en 4 ms
+  {"error": "UNAUTHORIZED", "mensaje": "API key de dispositivo inválida"}
+
+[S3-IOT-02] 23:09:58.373  POST /api/v1/iot/telemetria  (sin token)
+  cabeceras: X-IOT-KEY: <oculto>
+  envio: {"direccionMac": "0A:3A:06:0F:10:E3", "tipoEvento": "LECTURA_SENSOR", "payloadRecibido": "{\"candadoCerrado\": true, \"bateria\": 80, \"estadoConexion\": \"ONLINE\"}"}
+  respuesta: 201 en 38 ms
+  {"idLog": 382, "mensaje": "Evento IoT registrado correctamente"}
+
+[S3-IOT-02] 23:09:58.387  GET /api/v1/bahias/6  (administrador)
+  respuesta: 200 en 14 ms
+  {"idBahia": 6, "codigoIot": "QA-1011230954-B2", "ubicacion": "QA Patio 1011230954", "idEstado": 1, "idTipoPermitido": 2}
+
+[S3-IOT-07] 23:09:58.393  POST /api/mock-iot/comando  (sin token)
+  envio: {"direccionMac": "FF:FF:FF:FF:FF:FE", "comando": "LIBERAR_CERROJO"}
+  respuesta: 404 en 5 ms
+  {"status": "ERROR", "mensaje": "Dispositivo desconocido"}
+
+[S3-IOT-05] 23:09:58.403  POST /api/mock-iot/simular?mac=FF%3AFF%3AFF%3AFF%3AFF%3AFE&evento=LECTURA_SENSOR  (sin token)
+  respuesta: 404 en 10 ms
+  {"error": "NOT_FOUND", "mensaje": "Dispositivo no registrado: FF:FF:FF:FF:FF:FE"}
+
+[S3-IOT-06] 23:09:58.409  POST /api/mock-iot/comando  (sin token)
+  envio: {"direccionMac": "0A:3A:06:0F:10:E3", "comando": "LIBERAR_CERROJO"}
+  respuesta: 200 en 7 ms
+  {"status": "EJECUTADO", "mensaje": "Cerrojo liberado exitosamente en el hardware"}
+
+[S3-IOT-03] 23:09:58.444  POST /api/mock-iot/simular?mac=0A%3A3A%3A06%3A0F%3A10%3AE3&evento=ALERTA_FALLA  (sin token)
+  respuesta: 200 en 34 ms
+  {"idLog": 383, "mensaje": "Telemetría simulada registrada"}
+
+[S3-IOT-03] 23:09:58.461  GET /api/v1/bahias/6  (administrador)
+  respuesta: 200 en 17 ms
+  {"idBahia": 6, "codigoIot": "QA-1011230954-B2", "ubicacion": "QA Patio 1011230954", "idEstado": 4, "idTipoPermitido": 2}
+
+[S3-IOT-04] 23:09:58.507  POST /api/v1/reservas  (usuario A)
+  envio: {"idBahia": 6, "idVehiculo": 16}
+  respuesta: 409 en 46 ms
+  {"error": "CONFLICT", "mensaje": "La bahía no está disponible"}
+
+[S4-ANA-01] 23:09:58.519  GET /api/v1/analitica/embed-token  (administrador)
+  respuesta: 503 en 11 ms
+  {"error": "SERVICE_UNAVAILABLE", "mensaje": "Power BI no configurado (PBI_EMBED_URL)"}
+
+[S2-BAH-12] 23:09:58.541  DELETE /api/v1/bahias/5  (administrador)
+  respuesta: 204 en 22 ms
+
+[S2-BAH-12] 23:09:58.558  GET /api/v1/bahias/5  (administrador)
+  respuesta: 200 en 17 ms
+  {"idBahia": 5, "codigoIot": "QA-1011230954-B1", "ubicacion": "QA Patio 1011230954 - Norte", "idEstado": 4, "idTipoPermitido": 1}
+
+[LIMPIEZA] 23:09:58.578  DELETE /api/v1/bahias/6  (administrador)
+  respuesta: 204 en 20 ms
+
+[LIMPIEZA] 23:09:58.615  DELETE /api/v1/usuarios/21  (administrador)
+  respuesta: 204 en 37 ms
+
+[LIMPIEZA] 23:09:58.638  DELETE /api/v1/usuarios/22  (administrador)
+  respuesta: 204 en 23 ms
+
+[LIMPIEZA] 23:09:58.661  DELETE /api/v1/usuarios/23  (administrador)
+  respuesta: 204 en 24 ms

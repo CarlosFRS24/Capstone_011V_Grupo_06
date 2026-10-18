@@ -6,22 +6,22 @@ Proyecto Capstone del **Equipo Nodalix** — Escuela de Informática y Telecomun
 
 ## Qué es
 
-Hoy los bicicleteros no tienen ningún control: no se sabe si hay espacio, ni quién dejó qué. OmniDock propone que cada rack se pueda reservar y abrir desde el celular, y que la institución vea lo que pasa.
+Hoy los bicicleteros son estructuras de fierro en forma de U invertida, donde cada persona deja su bicicleta o scooter con su propio candado. Hace poco se agregó un control con el RUT y un código de barras en cada bicicleta, que registra la entrada y la salida, pero a la salida no siempre se revisa que la bicicleta sea de quien la saca. Además, no se sabe si hay espacio antes de llegar ni en qué lugar queda cada vehículo. OmniDock propone que cada rack se pueda reservar y abrir desde el celular, y que la institución vea cómo se usan los estacionamientos.
 
 - **App móvil:** el usuario entra con su cuenta institucional, registra su bicicleta o scooter, ve las bahías disponibles, reserva una (la reserva dura 15 minutos) y abre o cierra su sesión escaneando el código QR del rack.
 - **Panel web:** el administrador ve el estado de cada bahía (disponible, reservada, ocupada o fuera de servicio), gestiona usuarios y permisos, y maneja los tickets de mantención.
 - **Simulador IoT:** como no tenemos el hardware real, un simulador hace de candado: recibe las órdenes de abrir y cerrar y envía el estado del rack.
 - **Power BI:** los datos de uso se muestran en tableros para ver ocupación, horas punta y fallas.
 
-## Estado del proyecto (al 05/10/2026)
+## Estado del proyecto (al 17/10/2026)
 
 | Parte | Estado |
 | --- | --- |
 | Base de datos Oracle | Lista (Sprint 2) |
 | Backend y simulador IoT | Listos y probados (Sprint 2) |
 | Diseño de pantallas en Figma | Listo (Sprint 2) |
-| App móvil y panel web | En desarrollo (Sprint 3). Lo que hay en `frontend/` es un borrador inicial |
-| Tableros en Power BI | Pendiente (Sprint 4). Las vistas de la base ya están creadas |
+| App móvil y panel web | Listos y probados con el backend (Sprint 3) |
+| Power BI | Conectado a la base (Sprint 3). El informe completo y el embebido son del Sprint 4 |
 
 ## Tecnologías
 
@@ -38,13 +38,15 @@ Hoy los bicicleteros no tienen ningún control: no se sabe si hay espacio, ni qu
 
 | Carpeta | Qué tiene |
 | --- | --- |
-| `backend/` | API REST en Spring Boot, con el simulador IoT |
-| `frontend/` | App móvil y panel web en Ionic |
-| `database/` | Scripts de Oracle para crear la base, cargar datos de prueba y revisarlos |
-| `docs/arquitectura/` | ERS, DAS y diagramas UML |
-| `docs/sprint-0/` a `docs/sprint-4/` | Un README por sprint: qué hicimos, quién, entregables, pruebas y retrospectiva |
-| `docs/Evidencias Proyecto/` | Visión del producto, backlogs y definición de terminado |
-| `docs/qa/` | Registro detallado de las pruebas |
+| `Fase 1/`, `Fase 2/` y `Fase 3/` | Evidencias de cada fase de la asignatura: grupales, individuales (diarios de reflexión) y seguimiento semanal |
+| `Fase 2/Evidencias Proyecto/` | Visión del producto, Product Backlog, Sprint Backlog y definición de terminado |
+| `omnidock/backend/` | API REST en Spring Boot, con el simulador IoT |
+| `omnidock/frontend/` | App móvil (Android) y panel web en Ionic |
+| `omnidock/database/` | Scripts de Oracle para crear la base, cargar datos de prueba y revisarlos |
+| `omnidock/docs/arquitectura/` | ERS, DAS y diagramas UML |
+| `omnidock/docs/sprint-0/` a `omnidock/docs/sprint-3/` | Un README por sprint: qué hicimos, quién, entregables, pruebas y retrospectiva |
+| `omnidock/docs/gestion/` | Burndown y exportación de Jira |
+| `omnidock/docs/qa/` | Registro de las pruebas de la API y de la base |
 
 ## Cómo levantar el proyecto
 
@@ -59,8 +61,10 @@ Hoy los bicicleteros no tienen ningún control: no se sabe si hay espacio, ni qu
 
 ```bash
 git clone https://github.com/CarlosFRS24/Capstone_011V_Grupo_06.git
-cd Capstone_011V_Grupo_06
+cd Capstone_011V_Grupo_06/omnidock
 ```
+
+Desde aquí, todas las rutas de esta guía parten en la carpeta `omnidock/`.
 
 ### 2. Crear la base de datos
 
@@ -75,6 +79,11 @@ Para Power BI, aparte:
 
 5. `database/04_vistas_bi.sql`: crea las 8 vistas para los reportes. `00_drop.sql` no las borra.
 6. `database/05_consultas_bi.sql`: consultas de ejemplo sobre esas vistas (ocupación, horas punta, permanencia, reservas y mantención).
+7. `database/06_datos_historicos.sql`: carga datos de ejemplo de tres meses (15/06 al 17/09/2026) para que los reportes tengan qué mostrar. Se ejecuta una sola vez, después del 02 y del 04.
+
+Para probar las restricciones de la base:
+
+8. `database/07_prueba_check.sql`: intenta guardar valores inválidos y comprueba que la base los rechaza. No deja cambios, porque termina con ROLLBACK.
 
 > Los estados de bahía tienen ID fijo: 1 `DISPONIBLE`, 2 `RESERVADA`, 3 `OCUPADA` y 4 `FUERA_DE_SERVICIO`. Si se cambian, hay que actualizar `domain/Estados.java` en el backend.
 
@@ -106,9 +115,9 @@ Los usuarios de prueba están en `database/02_insert.sql`; por ejemplo, el admin
 
 Para correr todas las pruebas de la API de una vez, ver `backend/pruebas/README.md`.
 
-### 6. Frontend (en desarrollo)
+### 6. Frontend
 
-La app y el panel web se están construyendo en el Sprint 3. Para levantar lo que hay hoy:
+Para levantar la app y el panel web en el navegador:
 
 ```bash
 cd frontend
@@ -118,9 +127,9 @@ npm start          # http://localhost:8100
 
 - La dirección del backend se define en `frontend/src/environments/environment.ts` (por defecto `http://localhost:8080/api/v1`; en un emulador Android se usa `http://10.0.2.2:8080/api/v1`).
 - El administrador entra al panel web (`/admin`) y el usuario final a la app (`/app`).
-- En el navegador no hay cámara, así que el check-in pide escribir el código del rack (por ejemplo `RACK-BICI-01`). En el celular se escanea el QR.
+- En el navegador el check-in permite escribir el código del rack (por ejemplo `RACK-BICI-01`). En el celular se escanea el QR; hay QR de prueba en `frontend/qr-prueba/`.
 
-### 7. Power BI (pendiente, Sprint 4)
+### 7. Power BI (Sprint 4)
 
 La forma simple es publicar el reporte y definir la variable `PBI_EMBED_URL`; el backend la entrega en `GET /api/v1/analitica/embed-token`. La forma completa usa `PBI_MODO=embedded` con las credenciales de la aplicación registrada en Microsoft Entra ID (`PBI_TENANT_ID`, `PBI_CLIENT_ID`, `PBI_CLIENT_SECRET`, `PBI_WORKSPACE_ID` y `PBI_REPORT_ID`).
 
@@ -144,11 +153,12 @@ Partimos en cascada y el 09/09/2026 cambiamos a metodología ágil. Trabajamos e
 | Sprint 3 | 05/10 al 18/10 | App móvil, panel web e integración con el backend |
 | Sprint 4 | 19/10 al 01/11 | Power BI, pruebas finales y cierre |
 
-El detalle de cada sprint está en `docs/sprint-N/`.
+El detalle de cada sprint está en `omnidock/docs/sprint-N/`.
 
 ## Documentación
 
-- **ERS** (requisitos) y **DAS** (arquitectura, con el modelo de vistas 4+1): `docs/arquitectura/`
-- **Diagramas UML:** `docs/arquitectura/uml/`
-- **Visión del producto y backlogs:** `docs/Evidencias Proyecto/`
-- **Pruebas:** `docs/qa/` y el README de cada sprint
+- **ERS** (requisitos) y **DAS** (arquitectura, con el modelo de vistas 4+1): `omnidock/docs/arquitectura/`
+- **Diagramas UML:** `omnidock/docs/arquitectura/uml/`
+- **Visión del producto y backlogs:** `Fase 2/Evidencias Proyecto/`
+- **Burndown y Jira:** `omnidock/docs/gestion/`
+- **Pruebas:** `omnidock/docs/qa/` y el README de cada sprint

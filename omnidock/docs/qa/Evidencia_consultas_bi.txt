@@ -1,0 +1,178 @@
+
+OBJECT_NAME                                                                                                                      STATUS 
+-------------------------------------------------------------------------------------------------------------------------------- -------
+V_DIM_BAHIA                                                                                                                      VALID  
+V_DIM_FECHA                                                                                                                      VALID  
+V_DIM_USUARIO                                                                                                                    VALID  
+V_DIM_VEHICULO                                                                                                                   VALID  
+V_HECHO_EVENTO_IOT                                                                                                               VALID  
+V_HECHO_RESERVA                                                                                                                  VALID  
+V_HECHO_TICKET                                                                                                                   VALID  
+V_HECHO_USO                                                                                                                      VALID  
+
+8 filas seleccionadas. 
+
+
+UBICACION                                                                                                BAHIAS DISPONIBLES RESERVADAS   OCUPADAS FUERA_DE_SERVICIO PORCENTAJE_EN_USO
+---------------------------------------------------------------------------------------------------- ---------- ----------- ---------- ---------- ----------------- -----------------
+Sede Maipu - Acceso Norte                                                                                     2           1          0          0                 1                 0
+Sede Maipu - Patio Central                                                                                    2           1          0          1                 0                50
+
+
+HORA_INICIO       USOS
+----------- ----------
+         19        186
+          8         87
+         18         49
+         14         32
+         15         18
+          7         14
+          9         10
+         10          3
+         17          1
+         20          1
+
+10 filas seleccionadas. 
+
+
+UBICACION                                                                                            TIPO_VEHICULO                                      USOS_FINALIZADOS MINUTOS_PROMEDIO MINUTOS_MAXIMO
+---------------------------------------------------------------------------------------------------- -------------------------------------------------- ---------------- ---------------- --------------
+Sede Maipu - Acceso Norte                                                                            BICICLETA                                                       192              234            590
+Sede Maipu - Patio Central                                                                           SCOOTER                                                         208              234            543
+
+
+ESTADO_RESERVA         RESERVAS PORCENTAJE MINUTOS_VENTANA MINUTOS_PROMEDIO_HASTA_CHECKIN MINUTOS_MAXIMO_HASTA_CHECKIN
+-------------------- ---------- ---------- --------------- ------------------------------ ----------------------------
+CONCRETADA                  401       81,3              15                            7,4                           14
+EXPIRADA                     61       12,4              15                                                            
+CANCELADA                    31        6,3              15                                                            
+
+
+CODIGO_IOT                                         UBICACION                                                                                               TICKETS   ABIERTOS HORAS_PROMEDIO_RESOLUCION
+-------------------------------------------------- ---------------------------------------------------------------------------------------------------- ---------- ---------- -------------------------
+RACK-BICI-02                                       Sede Maipu - Acceso Norte                                                                                     4          1                      11,5
+RACK-BICI-01                                       Sede Maipu - Acceso Norte                                                                                     3          0                      27,2
+RACK-SCOOT-01                                      Sede Maipu - Patio Central                                                                                    3          0                       4,4
+RACK-SCOOT-02                                      Sede Maipu - Patio Central                                                                                    2          0                      17,1
+
+
+ROL                                                      USOS USUARIOS_DISTINTOS
+-------------------------------------------------- ---------- ------------------
+USUARIO                                                   350                  9
+COLABORADOR                                                51                  3
+
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+15/06/2026 Lunes                                         6            1675
+16/06/2026 Martes                                        5             991
+17/06/2026 Miércoles                                     4             825
+18/06/2026 Jueves                                        5            1060
+19/06/2026 Viernes                                       6            1361
+20/06/2026 Sábado                                        1             209
+22/06/2026 Lunes                                         5            1111
+23/06/2026 Martes                                        7            1719
+24/06/2026 Miércoles                                     4             934
+25/06/2026 Jueves                                        5            1455
+26/06/2026 Viernes                                       6            1611
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+27/06/2026 Sábado                                        1             229
+30/06/2026 Martes                                        7            1760
+01/07/2026 Miércoles                                     8            1910
+02/07/2026 Jueves                                        8            2058
+03/07/2026 Viernes                                       6            1262
+06/07/2026 Lunes                                         7            1641
+07/07/2026 Martes                                        5            1218
+08/07/2026 Miércoles                                     4             950
+09/07/2026 Jueves                                        5            1012
+10/07/2026 Viernes                                       6            1365
+11/07/2026 Sábado                                        3             656
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+13/07/2026 Lunes                                         7            1676
+14/07/2026 Martes                                        7            2024
+15/07/2026 Miércoles                                     6            1824
+17/07/2026 Viernes                                       6            1503
+18/07/2026 Sábado                                        2             451
+20/07/2026 Lunes                                         5            1165
+21/07/2026 Martes                                        6            1506
+22/07/2026 Miércoles                                     4             792
+23/07/2026 Jueves                                        5            1167
+24/07/2026 Viernes                                       6            1331
+25/07/2026 Sábado                                        1             152
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+27/07/2026 Lunes                                         7            1743
+28/07/2026 Martes                                        4            1051
+29/07/2026 Miércoles                                     6            1046
+30/07/2026 Jueves                                        4            1009
+31/07/2026 Viernes                                       6            1456
+03/08/2026 Lunes                                         7            1947
+04/08/2026 Martes                                        6            1157
+05/08/2026 Miércoles                                     6            1262
+06/08/2026 Jueves                                        5             997
+07/08/2026 Viernes                                       7            1806
+08/08/2026 Sábado                                        1             220
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+10/08/2026 Lunes                                         5            1277
+11/08/2026 Martes                                        3             662
+12/08/2026 Miércoles                                     6            1310
+13/08/2026 Jueves                                        4             961
+14/08/2026 Viernes                                       7            1556
+17/08/2026 Lunes                                         7            1545
+18/08/2026 Martes                                        6            1656
+19/08/2026 Miércoles                                     7            1670
+20/08/2026 Jueves                                        6            1273
+21/08/2026 Viernes                                       5            1252
+22/08/2026 Sábado                                        1             204
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+24/08/2026 Lunes                                         6            1316
+25/08/2026 Martes                                        6            1097
+26/08/2026 Miércoles                                     5            1121
+27/08/2026 Jueves                                        4             997
+28/08/2026 Viernes                                       5             950
+29/08/2026 Sábado                                        1             218
+31/08/2026 Lunes                                         7            1617
+01/09/2026 Martes                                        5            1113
+02/09/2026 Miércoles                                     3             733
+03/09/2026 Jueves                                        6            1296
+04/09/2026 Viernes                                       8            1883
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+07/09/2026 Lunes                                         6            1198
+08/09/2026 Martes                                        8            2207
+09/09/2026 Miércoles                                     7            1551
+10/09/2026 Jueves                                        4             769
+11/09/2026 Viernes                                       6            1624
+12/09/2026 Sábado                                        1             158
+14/09/2026 Lunes                                         8            1860
+15/09/2026 Martes                                        4             746
+16/09/2026 Miércoles                                     6            1231
+17/09/2026 Jueves                                        5             976
+21/09/2026 Lunes                                         2             880
+
+FECHA      NOMBRE_DIA                                 USOS MINUTOS_TOTALES
+---------- ------------------------------------ ---------- ---------------
+22/09/2026 Martes                                        1             410
+05/10/2026 Lunes                                         1                
+07/10/2026 Miércoles                                     1              19
+
+80 filas seleccionadas. 
+
+
+CODIGO_IOT                                         UBICACION                                                                                            ESTADO_CONEXION      ULTIMA_BATERIA ULTIMO_EVE
+-------------------------------------------------- ---------------------------------------------------------------------------------------------------- -------------------- -------------- ----------
+RACK-BICI-02                                       Sede Maipu - Acceso Norte                                                                            OFFLINE                           9 05/10/2026
+RACK-SCOOT-02                                      Sede Maipu - Patio Central                                                                           ONLINE                           64 05/10/2026
+RACK-SCOOT-01                                      Sede Maipu - Patio Central                                                                           ONLINE                           72 05/10/2026
+RACK-BICI-01                                       Sede Maipu - Acceso Norte                                                                            ONLINE                           85 05/10/2026
+

@@ -26,7 +26,7 @@ En este sprint no hubo código, así que revisamos los documentos y el modelo. L
 - **Por corregir:** los criterios de aceptación de la HU-02, y los estados no estaban restringidos en la base de datos (faltaban los CHECK).
 - **Pendiente:** nueve anexos del ERS seguían con el texto de la plantilla, y en Jira faltaba cargar las historias HU-01 a HU-05.
 
-El detalle está en `../qa/QA_evidencia_sprint1-2_2026-10-02.md`.
+El detalle está en `../qa/evidencias_api.md`.
 
 ## Comentarios del docente
 

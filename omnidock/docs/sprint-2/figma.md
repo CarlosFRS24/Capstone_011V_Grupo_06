@@ -23,5 +23,5 @@ y serán incorporados mediante la librería correspondiente durante el desarroll
 
 ## Recursos
 
-- Logo OmniDock: `assets/logo-omnidock.svg`
+- Logo OmniDock: `assets/Omnidock_logo.svg`
 - Iconografía: Material Symbols

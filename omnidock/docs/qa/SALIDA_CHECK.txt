@@ -1,0 +1,60 @@
+
+TABLE_NAME                                                                                                                       CONSTRAINT_NAME                                                                                                                  STATUS  
+-------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------- --------
+RESERVA                                                                                                                          CHK_ESTADO_RESERVA                                                                                                               ENABLED 
+TICKET_MANTENIMIENTO                                                                                                             CHK_ESTADO_TICKET                                                                                                                ENABLED 
+TRANSACCION_USO                                                                                                                  CHK_ESTADO_TRANSACCION                                                                                                           ENABLED 
+TRANSACCION_USO                                                                                                                  CHK_FECHAS                                                                                                                       ENABLED 
+USUARIO                                                                                                                          CHK_ESTADO_USUARIO                                                                                                               ENABLED 
+VEHICULO                                                                                                                         CHK_ESTADO_VEHICULO                                                                                                              ENABLED 
+
+6 filas seleccionadas. 
+
+
+Error que empieza en la línea: 20 del comando :
+UPDATE USUARIO SET ESTADO_SINCRONIZACION = 'SUSPENDIDO' WHERE ROWNUM = 1
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_ESTADO_USUARIO) violada
+
+
+Error que empieza en la línea: 23 del comando :
+UPDATE VEHICULO SET ESTADO_VEHICULO = 'ELIMINADO' WHERE ROWNUM = 1
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_ESTADO_VEHICULO) violada
+
+
+Error que empieza en la línea: 27 del comando :
+INSERT INTO VEHICULO (ID_USUARIO, ID_TIPO_VEHICULO, IDENTIFICADOR, ESTADO_VEHICULO) VALUES (4, 1, 'Prueba CHECK', 'PERDIDO')
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_ESTADO_VEHICULO) violada
+
+
+Error que empieza en la línea: 30 del comando :
+UPDATE RESERVA SET ESTADO_RESERVA = 'ANULADA' WHERE ROWNUM = 1
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_ESTADO_RESERVA) violada
+
+
+Error que empieza en la línea: 33 del comando :
+UPDATE TRANSACCION_USO SET ESTADO_TRANSACCION = 'PAUSADA' WHERE ROWNUM = 1
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_ESTADO_TRANSACCION) violada
+
+
+Error que empieza en la línea: 36 del comando :
+UPDATE TRANSACCION_USO SET FECHA_FIN = FECHA_INICIO - INTERVAL '1' HOUR WHERE FECHA_FIN IS NOT NULL AND ROWNUM = 1
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_FECHAS) violada
+
+
+Error que empieza en la línea: 40 del comando :
+UPDATE TICKET_MANTENIMIENTO SET ESTADO_TICKET = 'CERRADO' WHERE ROWNUM = 1
+Informe de error -
+ORA-02290: restricción de control (ADMIN.CHK_ESTADO_TICKET) violada
+
+
+   USUARIO   VEHICULO    RESERVA USO_ESTADO USO_FECHAS     TICKET
+---------- ---------- ---------- ---------- ---------- ----------
+         0          0          0          0          0          0
+
+Rollback terminado.
