@@ -24,6 +24,7 @@ public class IotService {
     private final LogEventoIotRepository logs;
     private final BahiaRepository bahias;
     private final ObjectMapper mapper;
+    private final ListaEsperaService listaEspera;
 
     /** Ingesta de telemetría (RF-03): registra el evento y, si es ALERTA_FALLA, pasa la bahía a FUERA_DE_SERVICIO. */
     @Transactional
@@ -51,7 +52,11 @@ public class IotService {
         }
         if ("ALERTA_FALLA".equalsIgnoreCase(req.tipoEvento()) && d.getIdBahia() != null) {
             bahias.findForUpdate(d.getIdBahia()).ifPresent(b -> {
-                if (b.getIdEstado() != Estados.BAHIA_FUERA_DE_SERVICIO) b.setIdEstado(Estados.BAHIA_FUERA_DE_SERVICIO);
+                // Si está ocupada no se le quita al usuario (igual que con los tickets); queda fuera de servicio igual.
+                if (b.getIdEstado() != Estados.BAHIA_FUERA_DE_SERVICIO) {
+                    b.setIdEstado(Estados.BAHIA_FUERA_DE_SERVICIO);
+                    listaEspera.bahiaRetirada(b);   // cancela la reserva pendiente sin falta
+                }
             });
         }
         return log;

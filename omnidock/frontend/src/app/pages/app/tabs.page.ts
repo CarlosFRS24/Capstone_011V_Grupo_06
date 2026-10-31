@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { bicycleOutline, homeOutline, scanOutline, timeOutline } from 'ionicons/icons';
+import { EstadoService } from '../../core/estado.service';
 
 /** Navegación inferior del diseño. La pestaña Perfil del mockup se reemplaza por Vehículos. */
 @Component({
@@ -20,5 +21,9 @@ import { bicycleOutline, homeOutline, scanOutline, timeOutline } from 'ionicons/
   `,
 })
 export class TabsPage {
-  constructor() { addIcons({ homeOutline, scanOutline, timeOutline, bicycleOutline }); }
+  private estado = inject(EstadoService);
+  constructor() {
+    addIcons({ homeOutline, scanOutline, timeOutline, bicycleOutline });
+    this.estado.iniciar();   // Faltas, lista de espera y avisos (se detiene solo al cerrar sesión)
+  }
 }

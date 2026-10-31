@@ -20,4 +20,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     boolean existsByIdUsuarioAndEstadoReserva(Long idUsuario, String estadoReserva);
     boolean existsByIdBahiaAndEstadoReserva(Long idBahia, String estadoReserva);
     List<Reserva> findByEstadoReservaAndFechaExpiracionBefore(String estadoReserva, Instant limite);
+    List<Reserva> findByIdBahiaAndEstadoReserva(Long idBahia, String estadoReserva);
 }

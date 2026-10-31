@@ -1,49 +1,71 @@
-# OmniDock Backend (Spring Boot 3 / Java 17 / Oracle)
+# OmniDock · Backend
 
-API REST según ERS v1.3.0 §5.8 y DAS v1.1 (patrón MVC, JWT + RBAC, borrado lógico, simulador IoT).
+Es el servidor de OmniDock: recibe lo que hacen la app y el panel web, aplica las reglas (reservas, uso de bahías, faltas, lista de espera) y guarda todo en la base de datos Oracle. También le envía al rack la orden de abrir o cerrar el candado.
 
-## Arranque rápido
+Está hecho en **Java 17 con Spring Boot 3** y expone una API REST protegida con login (JWT). Cada usuario solo puede hacer lo que permite su rol: administrador, usuario o colaborador.
+
+## Qué se necesita
+
+- Java 17 y Maven.
+- La base de datos Oracle cargada con los scripts de `../database/` (ver abajo).
+- Los datos de conexión a la base. Se entregan como variables de entorno y **nunca se suben a GitHub**:
+
+| Variable | Para qué |
+| --- | --- |
+| `DB_URL` | Dirección de la base en Oracle Cloud (incluye la ruta al wallet) |
+| `DB_USER` y `DB_PASSWORD` | Usuario y clave de la base |
+
+## Cómo levantarlo
+
 ```bash
-# 1) Variables (o edita application.yml)
-export DB_URL=jdbc:oracle:thin:@//localhost:1521/XEPDB1
-export DB_USER=omnidock DB_PASSWORD=tu_clave
-
-# 2) Primera vez: verifica que las entidades calcen con tu DDL (solo valida, no modifica)
-JPA_DDL=validate mvn spring-boot:run -Dspring-boot.run.profiles=mock
-
-# 3) Uso normal (perfil mock = simulador IoT dentro del mismo proceso)
+cd backend
 mvn spring-boot:run -Dspring-boot.run.profiles=mock
 ```
-Swagger: http://localhost:8080/swagger-ui.html
 
-## Scripts (carpeta `database/`)
-`00_drop.sql` -> `01_ddl.sql` -> `02_insert.sql` -> `03_verificar.sql`. La capa analítica va aparte: `04_vistas_bi.sql` -> `05_consultas_bi.sql`, y `06_datos_historicos.sql` carga datos de ejemplo para los reportes. `07_prueba_check.sql` prueba las restricciones CHECK. Los datos de prueba son coherentes con el backend y las fechas van en UTC.
+- El perfil `mock` activa el **simulador IoT**: reemplaza a los racks físicos y responde las órdenes del candado.
+- Queda en `http://localhost:8080`. La documentación de todos los servicios se ve en `http://localhost:8080/swagger-ui.html`.
 
-## Prueba de punta a punta (usuarios del seed)
-Admin: `csoto@duocuc.cl` / `admin123` (id 1). Usuario con bicicleta: `mmunoz@duocuc.cl` / `user123` (id 4, vehículo 1, bahía 1).
-```bash
-T=$(curl -s localhost:8080/api/v1/auth/login -H 'Content-Type: application/json' \
-  -d '{"emailInstitucional":"mmunoz@duocuc.cl","passwordPrototipo":"user123"}' | jq -r .token)
-curl -s "localhost:8080/api/v1/bahias?idEstado=1" -H "Authorization: Bearer $T"
-curl -s -X POST localhost:8080/api/v1/reservas -H "Authorization: Bearer $T" -H 'Content-Type: application/json' -d '{"idBahia":1,"idVehiculo":1}'
-curl -s -X POST localhost:8080/api/v1/transacciones/iniciar -H "Authorization: Bearer $T" -H 'Content-Type: application/json' -d '{"idReserva":7,"idBahia":1,"idVehiculo":1}'
-curl -s -X POST localhost:8080/api/v1/transacciones/5/finalizar -H "Authorization: Bearer $T"
-curl -s localhost:8080/api/v1/transacciones/usuario/4 -H "Authorization: Bearer $T"
-# Falla de hardware (HU-03), MAC de la bahía 1:
-curl -s -X POST "localhost:8080/api/mock-iot/simular?mac=00:1B:44:11:3A:B7&evento=ALERTA_FALLA"
-```
-(Los ids 7 y 5 son los siguientes del seed; usa los que devuelvan las respuestas.)
-Otros casos del seed: `gfuentes@duocuc.cl` / `user123` (id 11) tiene la reserva 6 PENDIENTE sobre la bahía 4 (scooter): puede hacer check-in con `{"idReserva":6,"idBahia":4,"idVehiculo":8}` antes de que expire (15 min desde que se cargó el seed). La bahía 2 está FUERA_DE_SERVICIO y la 3 OCUPADA (uso activo del usuario 10).
+### Opciones útiles para probar o presentar
 
-## Alineación con los scripts reales
-Columnas, IDENTITY y largos validados contra `01_ddl.sql`. Catálogos según `02_insert.sql`:
-ESTADO_BAHIA 1 DISPONIBLE / 2 RESERVADA / 3 OCUPADA / 4 FUERA_DE_SERVICIO; ROL 1 ADMINISTRADOR / 2 USUARIO / 3 COLABORADOR; TIPO_VEHICULO 1 BICICLETA / 2 SCOOTER.
-- La "mantención" del DAS/ERS se representa con FUERA_DE_SERVICIO (tickets abiertos y alertas de falla IoT).
-- El estado de una reserva con check-in es `CONCRETADA`, igual que en el ERS.
+| Variable | Qué hace |
+| --- | --- |
+| `HORARIO_ACTIVO=false` | Permite reservar a cualquier hora (normalmente solo L-V de 07:00 a 21:30 y sábado de 07:00 a 15:00) |
+| `RESERVA_MINUTOS=2` | La reserva vence a los 2 minutos en vez de 60, para ver una falta sin esperar |
 
-## Reglas implementadas (resumen)
-- Reserva: 1 pendiente por usuario, vehículo propio y activo, bahía DISPONIBLE y compatible por tipo; `SELECT FOR UPDATE` evita doble asignación; expira a los `RESERVA_MINUTOS` (15) vía job.
-- Check-in exige reserva PENDIENTE; si el simulador falla (502) se revierte todo. Check-out bloquea cerrojo y libera bahía (o FUERA_DE_SERVICIO si hay ticket abierto).
-- Ticket abierto -> bahía FUERA_DE_SERVICIO; ticket RESUELTO/ANULADO y sin otros abiertos -> DISPONIBLE. `CERRADO` se acepta como alias de `RESUELTO`.
-- Sin DELETE físico: usuarios, vehículos, bahías y tickets usan borrado lógico.
-- Admin-only: `/usuarios`, `/analitica`, CRUD de bahías y gestión de tickets (GET/PUT/DELETE).
+Ejemplo: `HORARIO_ACTIVO=false mvn spring-boot:run -Dspring-boot.run.profiles=mock`
+
+## Base de datos
+
+Los scripts están en `../database/` y se ejecutan en este orden:
+
+1. `00_drop.sql`: borra todo (la primera vez puede avisar que algunas tablas no existen; es normal).
+2. `01_ddl.sql`: crea las 14 tablas.
+3. `02_insert.sql`: carga los datos de prueba (usuarios, vehículos y 50 bahías).
+4. `03_verificar.sql`: revisa que la carga quedó bien.
+5. `04_vistas_bi.sql`: crea las vistas que usan Power BI y la pantalla Analítica.
+6. `06_datos_historicos.sql`: carga tres meses de historial de ejemplo (en la nube tarda unos minutos).
+
+`05_consultas_bi.sql` trae consultas de ejemplo de los indicadores y `07_prueba_check.sql` prueba las restricciones de la base. Ninguno de los dos es obligatorio.
+
+## Usuarios de prueba
+
+| Correo | Clave | Rol | Para qué sirve |
+| --- | --- | --- | --- |
+| `csoto@duocuc.cl` | `admin123` | Administrador | Panel web |
+| `mmunoz@duocuc.cl` | `user123` | Usuario | Tiene bicicleta; flujo normal de reserva |
+| `gfuentes@duocuc.cl` | `user123` | Usuario | Tiene scooter y una reserva pendiente (vence 60 min después de cargar la base) |
+| `fnavarro@duocuc.cl` | `user123` | Usuario | Tiene 3 faltas: no puede reservar hasta que el admin la desbloquee |
+
+## Reglas principales
+
+- **Reserva:** el usuario reserva una bahía libre y compatible con su vehículo, y tiene **60 minutos** para llegar. Solo puede tener una reserva pendiente, y dos personas no pueden reservar la misma bahía.
+- **Horario:** se reserva de lunes a viernes de 07:00 a 21:30 y el sábado de 07:00 a 15:00 (hasta una hora antes del cierre). El domingo está cerrado.
+- **Uso:** al escanear el QR del rack se abre el candado (check-in) y al terminar se cierra (check-out). Si el rack no responde en 2 segundos, no se cambia nada.
+- **Faltas:** si la reserva vence sin check-in, queda una falta. Con **3 faltas** el usuario no puede reservar, pero sí usar la app y retirar su vehículo. El administrador las anula desde el panel.
+- **Lista de espera:** si no hay bahías libres para su vehículo, el usuario se anota. Cuando se libera una, se le guarda **15 minutos** al primero y se le avisa en la app. Si no confirma, pasa al siguiente sin falta. La lista se cierra al terminar el horario.
+- **Mantención:** un ticket o una alerta del rack deja la bahía fuera de servicio. Si estaba reservada, la reserva se cancela sin falta.
+- **Sin borrado físico:** usuarios, vehículos, bahías y tickets se desactivan, no se borran, para mantener el historial.
+
+## Pruebas
+
+En `pruebas/` están la regresión automática de la API y la prueba de carga. Cómo correrlas está en `pruebas/README.md`; los reportes quedan en `../docs/qa/`.

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -24,11 +23,19 @@ public class ReservaService {
     private final BahiaRepository bahias;
     private final VehiculoRepository vehiculos;
     private final UsuarioRepository usuarios;
+    private final HorarioService horario;
+    private final FaltaService faltas;
+    private final ListaEsperaService listaEspera;
 
     @Value("${omnidock.reserva.minutos-expiracion}")
     private long minutosExpiracion;
 
-    /** RF-02 / RF-06: asigna bahía compatible con el vehículo. El FOR UPDATE sobre la bahía evita la doble asignación. */
+    public long minutosExpiracion() { return minutosExpiracion; }
+
+    /**
+     * RF-02 / RF-06: asigna bahía compatible con el vehículo. El FOR UPDATE sobre la bahía evita la doble asignación.
+     * Solo en horario de reservas, no si tiene 3 faltas, y con 60 min para llegar (sin pasar del cierre).
+     */
     @Transactional
     public Reserva crear(ReservaCreate req) {
         AuthUser me = CurrentUser.get();
@@ -36,6 +43,8 @@ public class ReservaService {
 
         Usuario u = usuarios.findById(idUsuario).orElseThrow(() -> ApiException.notFound("Usuario no existe"));
         if (!Estados.USR_VIGENTE.equals(u.getEstadoSincronizacion())) throw ApiException.forbidden("Usuario no vigente");
+        faltas.validarNoBloqueado(idUsuario);
+        horario.validarReservasAbiertas();
 
         Vehiculo v = vehiculos.findById(req.idVehiculo()).orElseThrow(() -> ApiException.notFound("Vehículo no encontrado"));
         if (!v.getIdUsuario().equals(idUsuario) || !Estados.VEH_ACTIVO.equals(v.getEstadoVehiculo()))
@@ -57,9 +66,11 @@ public class ReservaService {
         r.setIdVehiculo(v.getIdVehiculo());
         Instant ahora = Instant.now();
         r.setFechaSolicitud(ahora);
-        r.setFechaExpiracion(ahora.plus(minutosExpiracion, ChronoUnit.MINUTES));
+        r.setFechaExpiracion(horario.vencimiento(ahora, minutosExpiracion));
         r.setEstadoReserva(Estados.RES_PENDIENTE);
-        return reservas.save(r);
+        r = reservas.save(r);
+        listaEspera.salirPorReserva(idUsuario);
+        return r;
     }
 
     @Transactional(readOnly = true)
@@ -79,19 +90,24 @@ public class ReservaService {
         return r;
     }
 
-    /** Pasa a EXPIRADA las reservas pendientes vencidas y libera su bahía. */
+    /** Pasa a EXPIRADA las reservas pendientes vencidas, registra la falta y libera su bahía. */
     @Scheduled(fixedDelayString = "${omnidock.reserva.intervalo-expiracion-ms}")
     @Transactional
     public void expirarVencidas() {
         for (Reserva r : reservas.findByEstadoReservaAndFechaExpiracionBefore(Estados.RES_PENDIENTE, Instant.now())) {
             r.setEstadoReserva(Estados.RES_EXPIRADA);
+            faltas.registrar(r);
             liberarBahia(r.getIdBahia());
         }
     }
 
+    /** La bahía vuelve a DISPONIBLE y, si hay alguien en la lista de espera, se le ofrece. */
     private void liberarBahia(Long idBahia) {
         bahias.findForUpdate(idBahia).ifPresent(b -> {
-            if (b.getIdEstado() == Estados.BAHIA_RESERVADA) b.setIdEstado(Estados.BAHIA_DISPONIBLE);
+            if (b.getIdEstado() == Estados.BAHIA_RESERVADA) {
+                b.setIdEstado(Estados.BAHIA_DISPONIBLE);
+                listaEspera.bahiaLiberada(b);
+            }
         });
     }
 }

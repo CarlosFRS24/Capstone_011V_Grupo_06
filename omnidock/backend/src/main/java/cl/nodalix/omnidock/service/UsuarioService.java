@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -19,10 +20,13 @@ public class UsuarioService {
 
     private static final Set<String> ESTADOS = Set.of(Estados.USR_VIGENTE, Estados.USR_BLOQUEADO, Estados.USR_INACTIVO);
     private final UsuarioRepository repo;
+    private final FaltaService faltas;
 
+    /** Incluye las faltas vigentes de cada usuario (con 3 no puede reservar). */
     @Transactional(readOnly = true)
     public List<UsuarioDto> listar() {
-        return repo.findAll().stream().map(UsuarioDto::from).toList();
+        Map<Long, Long> vigentes = faltas.vigentesPorUsuario();
+        return repo.findAll().stream().map(u -> UsuarioDto.from(u, vigentes.getOrDefault(u.getIdUsuario(), 0L))).toList();
     }
 
     @Transactional

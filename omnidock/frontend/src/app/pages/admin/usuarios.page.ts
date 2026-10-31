@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActionSheetController, IonButton, IonContent, IonIcon, IonRefresher, IonRefresherContent, ModalController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { banOutline, checkmarkCircleOutline, ellipsisVertical, personAddOutline, personOutline, searchOutline } from 'ionicons/icons';
+import { alertCircleOutline, banOutline, checkmarkCircleOutline, ellipsisVertical, personAddOutline, personOutline, searchOutline } from 'ionicons/icons';
 import { ApiService } from '../../core/api.service';
 import { AuthService } from '../../core/auth.service';
 import { iniciales } from '../../core/format';
@@ -16,7 +16,10 @@ const ESTADO: Record<string, { nombre: string; clase: string }> = {
   INACTIVO: { nombre: 'Inactivo', clase: '' },
 };
 
-/** Gestión de usuarios (HU-10): resumen, filtros, alta, cambio de rol, bloqueo y desactivación. */
+/*
+  Gestión de usuarios (HU-10): resumen, filtros, alta, cambio de rol, bloqueo y desactivación.
+  Faltas por no llegar a la reserva; con 3 no puede reservar y aquí se desbloquea.
+ */
 @Component({
   selector: 'app-usuarios',
   standalone: true,
@@ -31,6 +34,9 @@ const ESTADO: Record<string, { nombre: string; clase: string }> = {
           <div class="kpi azul"><span class="tile"><ion-icon name="person-outline"></ion-icon></span><div><b>{{ usuarios().length }}</b><span>Usuarios totales</span></div></div>
           <div class="kpi verde"><span class="tile verde"><ion-icon name="checkmark-circle-outline"></ion-icon></span><div><b>{{ cuenta('VIGENTE') }}</b><span>Vigentes</span></div></div>
           <div class="kpi roja"><span class="tile roja"><ion-icon name="ban-outline"></ion-icon></span><div><b>{{ cuenta('BLOQUEADO') }}</b><span>Bloqueados</span></div></div>
+          <button class="kpi ambar" [class.sel]="soloSancionados()" (click)="soloSancionados.set(!soloSancionados())">
+            <span class="tile"><ion-icon name="alert-circle-outline"></ion-icon></span><div><b>{{ sancionados() }}</b><span>Sin poder reservar (3 faltas)</span></div>
+          </button>
         </div>
 
         <div class="filtros">
@@ -55,7 +61,7 @@ const ESTADO: Record<string, { nombre: string; clase: string }> = {
 
         <div class="tabla-caja">
           <table class="tabla">
-            <thead><tr><th>Nombre</th><th>Correo institucional</th><th>RUT</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Nombre</th><th>Correo institucional</th><th>RUT</th><th>Rol</th><th>Estado</th><th>Faltas</th><th>Acciones</th></tr></thead>
             <tbody>
               @for (u of visibles(); track u.idUsuario) {
                 <tr>
@@ -64,10 +70,15 @@ const ESTADO: Record<string, { nombre: string; clase: string }> = {
                   <td class="gris">{{ u.rut }}</td>
                   <td>{{ rol(u.idRol) }}</td>
                   <td><span class="chip {{ claseEstado(u.estadoSincronizacion) }}">{{ nombreEstado(u.estadoSincronizacion) }}</span></td>
+                  <td>
+                    @if ((u.faltasVigentes ?? 0) >= maxFaltas) { <span class="chip roja">{{ u.faltasVigentes }} de {{ maxFaltas }} · no puede reservar</span> }
+                    @else if ((u.faltasVigentes ?? 0) > 0) { <span class="chip ambar">{{ u.faltasVigentes }} de {{ maxFaltas }}</span> }
+                    @else { <span class="gris">0</span> }
+                  </td>
                   <td><button class="mas" (click)="acciones(u)" [attr.aria-label]="'Acciones de ' + u.nombreCompleto"><ion-icon name="ellipsis-vertical"></ion-icon></button></td>
                 </tr>
               } @empty {
-                <tr><td colspan="6" class="gris" style="text-align:center">{{ cargado() ? 'Sin resultados.' : 'Cargando…' }}</td></tr>
+                <tr><td colspan="7" class="gris" style="text-align:center">{{ cargado() ? 'Sin resultados.' : 'Cargando…' }}</td></tr>
               }
             </tbody>
           </table>
@@ -91,15 +102,19 @@ export class UsuariosPage {
   fRol = signal(0);
   fEstado = signal('');
   cargado = signal(false);
+  soloSancionados = signal(false);
+  readonly maxFaltas = 3;
+  sancionados = computed(() => this.usuarios().filter((u) => (u.faltasVigentes ?? 0) >= this.maxFaltas).length);
   visibles = computed(() => {
     const q = this.texto().trim().toLowerCase();
     return this.usuarios().filter((u) =>
       (!this.fRol() || u.idRol === this.fRol()) &&
       (!this.fEstado() || u.estadoSincronizacion === this.fEstado()) &&
+      (!this.soloSancionados() || (u.faltasVigentes ?? 0) >= this.maxFaltas) &&
       (!q || u.nombreCompleto.toLowerCase().includes(q) || (u.emailInstitucional ?? '').toLowerCase().includes(q) || (u.rut ?? '').toLowerCase().includes(q)));
   });
 
-  constructor() { addIcons({ personOutline, personAddOutline, checkmarkCircleOutline, banOutline, searchOutline, ellipsisVertical }); }
+  constructor() { addIcons({ personOutline, personAddOutline, checkmarkCircleOutline, banOutline, searchOutline, ellipsisVertical, alertCircleOutline }); }
   ionViewWillEnter() { this.cargar(); }
 
   ini = iniciales;
@@ -127,6 +142,9 @@ export class UsuariosPage {
     const botones: { text: string; role?: string; handler?: () => void }[] = Object.entries(ROL)
       .filter(([id]) => +id !== u.idRol)
       .map(([id, nombre]) => ({ text: `Cambiar rol a ${nombre}`, handler: () => this.actualizar(u, { idRol: +id }, 'Rol actualizado') }));
+    if ((u.faltasVigentes ?? 0) > 0) {
+      botones.unshift({ text: `Anular faltas y desbloquear reservas (${u.faltasVigentes})`, handler: () => this.desbloquear(u) });
+    }
     if (!esYo) {
       if (u.estadoSincronizacion === 'VIGENTE') botones.push({ text: 'Bloquear acceso', handler: () => this.actualizar(u, { estadoSincronizacion: 'BLOQUEADO' }, 'Usuario bloqueado') });
       else botones.push({ text: 'Habilitar acceso', handler: () => this.actualizar(u, { estadoSincronizacion: 'VIGENTE' }, 'Usuario habilitado') });
@@ -140,6 +158,16 @@ export class UsuariosPage {
   private actualizar(u: Usuario, cambios: { idRol?: number; estadoSincronizacion?: string }, msg: string) {
     this.api.actualizarUsuario(u.idUsuario, cambios).subscribe({
       next: () => { this.ui.ok(msg); this.cargar(); },
+      error: (e) => this.ui.error(e),
+    });
+  }
+
+  /* Anula las faltas vigentes para que vuelva a poder reservar. */
+  private async desbloquear(u: Usuario) {
+    const msg = `Se anularán las ${u.faltasVigentes} faltas vigentes de ${u.nombreCompleto} y podrá volver a reservar. Quedan registradas como anuladas.`;
+    if (!(await this.ui.confirmar('Desbloquear reservas', msg, 'Desbloquear'))) return;
+    this.api.desbloquearUsuario(u.idUsuario).subscribe({
+      next: (r) => { this.ui.ok(`${r.faltasAnuladas} faltas anuladas`); this.cargar(); },
       error: (e) => this.ui.error(e),
     });
   }

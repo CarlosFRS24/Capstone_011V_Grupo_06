@@ -7,6 +7,7 @@ import cl.nodalix.omnidock.dto.Dtos.BahiaRequest;
 import cl.nodalix.omnidock.exception.ApiException;
 import cl.nodalix.omnidock.repository.BahiaRepository;
 import cl.nodalix.omnidock.repository.DispositivoIotRepository;
+import cl.nodalix.omnidock.repository.ListaEsperaRepository;
 import cl.nodalix.omnidock.repository.ReservaRepository;
 import cl.nodalix.omnidock.repository.TicketMantenimientoRepository;
 import cl.nodalix.omnidock.repository.TipoVehiculoRepository;
@@ -29,6 +30,8 @@ public class BahiaService {
     private final ReservaRepository reservas;
     private final TransaccionUsoRepository transacciones;
     private final TicketMantenimientoRepository tickets;
+    private final ListaEsperaRepository listaEsperaRepo;
+    private final ListaEsperaService listaEspera;
 
     @Transactional(readOnly = true)
     public List<Bahia> listar(Integer idEstado, Long idTipoPermitido, String ubicacion) {
@@ -78,6 +81,7 @@ public class BahiaService {
             d.setEstadoConexion("OFFLINE");
             dispositivos.save(d);
         }
+        listaEspera.bahiaLiberada(b);   // una bahía nueva libre se ofrece a la lista de espera
         return b;
     }
 
@@ -91,8 +95,12 @@ public class BahiaService {
         }
         if (req.idEstado() != null) {
             validarEstado(req.idEstado());
+            int anterior = b.getIdEstado();
             if (req.idEstado() == Estados.BAHIA_DISPONIBLE) validarPuedeQuedarDisponible(b.getIdBahia());
             b.setIdEstado(req.idEstado());
+            // lista de espera: ofrecer la bahía o cancelar lo que estaba sobre ella
+            if (req.idEstado() == Estados.BAHIA_FUERA_DE_SERVICIO && anterior != Estados.BAHIA_FUERA_DE_SERVICIO) listaEspera.bahiaRetirada(b);
+            if (req.idEstado() == Estados.BAHIA_DISPONIBLE && anterior != Estados.BAHIA_DISPONIBLE) listaEspera.bahiaLiberada(b);
         }
         return b;
     }
@@ -102,6 +110,7 @@ public class BahiaService {
     public void eliminar(Long id) {
         Bahia b = repo.findForUpdate(id).orElseThrow(() -> ApiException.notFound("Bahía no encontrada"));
         b.setIdEstado(Estados.BAHIA_FUERA_DE_SERVICIO);
+        listaEspera.bahiaRetirada(b);   // cancela la reserva u oferta sin falta
     }
 
     /**
@@ -112,6 +121,8 @@ public class BahiaService {
     private void validarPuedeQuedarDisponible(Long idBahia) {
         if (reservas.existsByIdBahiaAndEstadoReserva(idBahia, Estados.RES_PENDIENTE))
             throw ApiException.conflict("La bahía tiene una reserva pendiente; cancélala antes de dejarla disponible");
+        if (listaEsperaRepo.existsByIdBahiaOfrecidaAndEstadoEspera(idBahia, Estados.ESP_OFRECIDA))
+            throw ApiException.conflict("La bahía está ofrecida a alguien de la lista de espera; espera a que confirme o venzan sus 15 minutos");
         if (transacciones.existsByIdBahiaAndEstadoTransaccion(idBahia, Estados.TX_ACTIVA))
             throw ApiException.conflict("La bahía está en uso; debe terminar la sesión antes de dejarla disponible");
         if (tickets.existsByIdBahiaAndEstadoTicketIn(idBahia, List.of(Estados.TK_ABIERTO, Estados.TK_EN_REVISION)))

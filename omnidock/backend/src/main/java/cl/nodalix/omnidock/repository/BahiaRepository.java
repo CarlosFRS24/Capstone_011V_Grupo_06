@@ -5,6 +5,7 @@ import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
+import java.util.List;
 import java.util.Optional;
 
 public interface BahiaRepository extends JpaRepository<Bahia, Long>, JpaSpecificationExecutor<Bahia> {
@@ -17,4 +18,8 @@ public interface BahiaRepository extends JpaRepository<Bahia, Long>, JpaSpecific
 
     Optional<Bahia> findByCodigoIot(String codigoIot);
     boolean existsByCodigoIot(String codigoIot);
+
+    /** Bahías libres de un tipo (para la lista de espera). */
+    List<Bahia> findByIdTipoPermitidoAndIdEstadoOrderByIdBahia(Long idTipoPermitido, Integer idEstado);
+    boolean existsByIdTipoPermitidoAndIdEstado(Long idTipoPermitido, Integer idEstado);
 }

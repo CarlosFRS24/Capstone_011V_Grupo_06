@@ -2,6 +2,7 @@ package cl.nodalix.omnidock.web;
 
 import cl.nodalix.omnidock.domain.Usuario;
 import cl.nodalix.omnidock.dto.Dtos.*;
+import cl.nodalix.omnidock.service.FaltaService;
 import cl.nodalix.omnidock.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UsuarioController {
     private final UsuarioService service;
+    private final FaltaService faltas;
 
     @GetMapping
     public List<UsuarioDto> listar() { return service.listar(); }
@@ -31,6 +33,17 @@ public class UsuarioController {
     public Map<String, Object> actualizar(@PathVariable Long id, @RequestBody UsuarioUpdate req) {
         Usuario u = service.actualizar(id, req);
         return Map.of("idUsuario", u.getIdUsuario(), "mensaje", "Usuario actualizado");
+    }
+
+    /** Faltas del usuario (vigentes y anuladas). */
+    @GetMapping("/{id}/faltas")
+    public List<FaltaDto> faltas(@PathVariable Long id) { return faltas.deUsuario(id); }
+
+    /** Anula las faltas vigentes para que vuelva a poder reservar. */
+    @PutMapping("/{id}/desbloquear")
+    public Map<String, Object> desbloquear(@PathVariable Long id) {
+        int n = faltas.desbloquear(id);
+        return Map.of("idUsuario", id, "faltasAnuladas", n, "mensaje", "Usuario desbloqueado para reservar");
     }
 
     @DeleteMapping("/{id}")

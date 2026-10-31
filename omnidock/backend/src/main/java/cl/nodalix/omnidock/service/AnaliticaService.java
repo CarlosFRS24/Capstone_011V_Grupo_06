@@ -20,6 +20,8 @@ import java.util.Map;
  * RF-11. Dos modos (omnidock.powerbi.modo):
  *  - publicado: devuelve la URL ya publicada para un iframe (rápido para la demo).
  *  - embedded : service principal de Azure AD -> GenerateToken de la API REST de Power BI.
+ * Queda como opción. La cuenta del instituto no permite publicar ni embeber el informe,
+ * así que el panel muestra sus propios gráficos (ResumenAnaliticaService) y este informe solo aparece si se configura.
  */
 @Service
 public class AnaliticaService {

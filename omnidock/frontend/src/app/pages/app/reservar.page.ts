@@ -7,6 +7,8 @@ import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiService } from '../../core/api.service';
 import { AuthService } from '../../core/auth.service';
+import { EstadoService } from '../../core/estado.service';
+import { hora } from '../../core/format';
 import { Bahia, ESTADO_BAHIA, EST, TIPO_VEHICULO, Vehiculo } from '../../core/models';
 import { PreferenciasService } from '../../core/preferencias.service';
 import { UiService } from '../../core/ui.service';
@@ -68,11 +70,12 @@ import { VehIconComponent } from '../../shared/veh-icon.component';
 
     <ion-footer class="ion-no-border">
       <div class="pie-fijo">
-        <ion-button expand="block" [disabled]="!bahia() || enviando()" (click)="reservar()">
+        @if (bloqueo(); as msg) { <p class="nota bloqueo">{{ msg }}</p> }
+        <ion-button expand="block" [disabled]="!bahia() || enviando() || !!bloqueo()" (click)="reservar()">
           @if (enviando()) { <ion-spinner name="dots"></ion-spinner> }
           @else { Reservar bahía <ion-icon slot="end" name="arrow-forward-outline"></ion-icon> }
         </ion-button>
-        <p class="nota">Tendrás {{ minutos }} minutos para llegar y escanear</p>
+        @if (!bloqueo()) { <p class="nota">Tendrás hasta las {{ limite() }} para llegar y escanear ({{ minutos() }} min). Si no llegas, se registra una falta.</p> }
       </div>
     </ion-footer>
   `,
@@ -92,6 +95,7 @@ import { VehIconComponent } from '../../shared/veh-icon.component';
     .pie-fijo { background: #fff; border-top: 1px solid var(--od-line); padding: 10px 18px 14px; }
     .pie-fijo > * { max-width: 484px; margin-inline: auto; }
     .pie-fijo ion-button { display: block; }
+    .bloqueo { color: var(--od-red); margin: 0 0 8px; }
   `],
 })
 export class ReservarPage {
@@ -101,8 +105,28 @@ export class ReservarPage {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private prefs = inject(PreferenciasService);
+  private estadoSrv = inject(EstadoService);
 
-  minutos = environment.reservaMinutos;
+  // 60 min para llegar (lo entrega el backend), sin pasar del cierre de la sede
+  minutos = computed(() => this.estadoSrv.estado()?.minutosReserva ?? environment.reservaMinutos);
+  limite = computed(() => {
+    const fin = new Date(Date.now() + this.minutos() * 60000);
+    const cierre = this.estadoSrv.estado()?.horario.cierre;
+    if (this.estadoSrv.estado()?.horario.activo && cierre) {
+      const [h, m] = cierre.split(':').map(Number);
+      const c = new Date(); c.setHours(h, m, 0, 0);
+      if (fin > c) return hora(c.toISOString());
+    }
+    return hora(fin.toISOString());
+  });
+  /** Motivo por el que no puede reservar ahora (faltas u horario), o null. */
+  bloqueo = computed(() => {
+    const e = this.estadoSrv.estado();
+    if (!e) return null;
+    if (e.reservasBloqueadas) return `Tienes ${e.faltasVigentes} faltas: no puedes reservar hasta que la administración te desbloquee.`;
+    if (!e.horario.reservasAbiertas) return e.horario.mensaje;
+    return null;
+  });
   bahia = signal<Bahia | null>(null);
   vehiculos = signal<Vehiculo[]>([]);
   cargado = signal(false);
@@ -121,6 +145,7 @@ export class ReservarPage {
     const idBahia = Number(this.route.snapshot.paramMap.get('idBahia'));
     this.idElegido.set(null);
     this.enviando.set(false);
+    this.estadoSrv.refrescar();
     forkJoin({ b: this.api.bahias(), v: this.api.vehiculos(this.auth.user()!.idUsuario) }).subscribe({
       next: ({ b, v }) => { this.bahia.set(b.find((x) => x.idBahia === idBahia) ?? null); this.vehiculos.set(v); this.cargado.set(true); },
       error: (e) => { this.cargado.set(true); this.ui.error(e, 'No se pudo cargar la bahía'); },
@@ -151,7 +176,7 @@ export class ReservarPage {
         this.ui.ok('Reserva creada');
         this.router.navigateByUrl('/app/sesion', { replaceUrl: true });
       },
-      error: (e) => { this.enviando.set(false); this.ui.error(e, 'No se pudo reservar'); },
+      error: (e) => { this.enviando.set(false); this.ui.error(e, 'No se pudo reservar'); this.estadoSrv.refrescar(); },
     });
   }
 }

@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/v1/bahias/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/bahias/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/usuarios", "/api/v1/usuarios/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/lista-espera/activa").hasRole("ADMIN")
                 .requestMatchers("/api/v1/analitica/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/tickets", "/api/v1/tickets/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/tickets/**").hasRole("ADMIN")

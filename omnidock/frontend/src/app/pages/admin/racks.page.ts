@@ -4,8 +4,8 @@ import { addIcons } from 'ionicons';
 import { addOutline, ellipsisVertical, locationOutline, searchOutline } from 'ionicons/icons';
 import { environment } from '../../../environments/environment';
 import { ApiService } from '../../core/api.service';
-import { partirUbicacion } from '../../core/format';
-import { Bahia, ESTADO_BAHIA, EST, TIPO_VEHICULO } from '../../core/models';
+import { hora, partirUbicacion } from '../../core/format';
+import { Bahia, ESTADO_BAHIA, EST, EsperaAdmin, TIPO_VEHICULO } from '../../core/models';
 import { UiService } from '../../core/ui.service';
 import { AdminTopComponent } from '../../shared/admin-top.component';
 import { VehIconComponent } from '../../shared/veh-icon.component';
@@ -58,6 +58,29 @@ const TONO: Record<number, string> = { 1: 'verde', 2: 'ambar', 3: 'azul', 4: 'ro
         </div>
         <p class="vivo">En vivo · actualizado {{ actualizado() }}</p>
 
+        <!-- Quiénes esperan una bahía ahora -->
+        @if (espera().length) {
+          <div class="tabla-caja espera">
+            <table class="tabla">
+              <thead><tr><th>Lista de espera ({{ espera().length }})</th><th>Vehículo</th><th>Desde</th><th>Estado</th><th></th></tr></thead>
+              <tbody>
+                @for (e of espera(); track e.idEspera) {
+                  <tr>
+                    <td><b>{{ e.posicion ? e.posicion + '.' : '' }}</b> {{ e.nombreCompleto }}</td>
+                    <td class="gris">{{ e.vehiculo }} · {{ tipo(e.idTipoVehiculo) }}</td>
+                    <td class="gris">{{ hora(e.fechaRegistro) }}</td>
+                    <td>
+                      @if (e.estadoEspera === 'OFRECIDA') { <span class="chip verde">Se le ofreció {{ e.codigoIot }} hasta las {{ hora(e.fechaLimiteOferta) }}</span> }
+                      @else { <span class="chip ambar">Esperando</span> }
+                    </td>
+                    <td></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
         <div class="grid">
           @for (b of visibles(); track b.idBahia) {
             <div class="rack {{ tono(b.idEstado) }}">
@@ -90,6 +113,7 @@ const TONO: Record<number, string> = { 1: 'verde', 2: 'ambar', 3: 'azul', 4: 'ro
     .dato { font-size: 13px; color: var(--od-muted); display: flex; align-items: center; gap: 5px; }
     .dato ion-icon { font-size: 12px; }
     .mas { align-self: flex-start; }
+    .espera { margin-bottom: 22px; }
   `],
 })
 export class RacksPage implements OnDestroy {
@@ -101,6 +125,8 @@ export class RacksPage implements OnDestroy {
 
   private timer?: ReturnType<typeof setInterval>;
   bahias = signal<Bahia[]>([]);
+  espera = signal<EsperaAdmin[]>([]);
+  hora = hora;
   fEstado = signal<number>(0);
   fTipo = signal<number>(0);
   fSede = signal('');
@@ -147,6 +173,7 @@ export class RacksPage implements OnDestroy {
       next: (b) => { this.bahias.set(b); this.cargado.set(true); this.actualizado.set(new Date().toLocaleTimeString('es-CL', { hour12: false })); },
       error: (e) => { if (mostrarError) this.ui.error(e, 'No se pudieron cargar las bahías'); },
     });
+    this.api.esperaActiva().subscribe({ next: (l) => this.espera.set(l), error: () => {} });
   }
 
   async nueva() {

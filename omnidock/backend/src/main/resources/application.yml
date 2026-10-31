@@ -34,13 +34,24 @@ omnidock:
   cors:
     origins: ${CORS_ORIGINS:http://localhost:8100,http://localhost:4200,http://localhost,https://localhost,capacitor://localhost,ionic://localhost}
   reserva:
-    minutos-expiracion: ${RESERVA_MINUTOS:15}
+    minutos-expiracion: ${RESERVA_MINUTOS:60}   # 1 hora para llegar
     intervalo-expiracion-ms: 30000
+  horario:                                      # horario de la sede, en hora de Chile
+    activo: ${HORARIO_ACTIVO:true}              # false = se puede reservar a cualquier hora (para pruebas o presentar)
+    zona: America/Santiago
+    apertura-reservas: "07:00"
+    cierre-semana: "22:30"                      # lunes a viernes; se reserva hasta 1 hora antes (21:30)
+    cierre-sabado: "16:00"                      # sábado; se reserva hasta las 15:00. Domingo cerrado
+    minutos-antes-cierre: 60
+  faltas:
+    maximo: 3                                   # con 3 faltas vigentes no puede reservar
+  lista-espera:
+    minutos-oferta: 15                          # minutos que se le guarda la bahía al primero de la lista
   iot:
     base-url: ${IOT_BASE_URL:http://localhost:8080}   # con perfil "mock" apunta a sí mismo
     api-key: ${IOT_API_KEY:omnidock-iot-key}
     timeout-ms: 2000
-  powerbi:
+  powerbi:                               # opcional: sin PBI_EMBED_URL el panel muestra solo sus gráficos propios
     modo: ${PBI_MODO:publicado}          # publicado = iframe con URL ya publicada | embedded = token Azure AD
     embed-url: ${PBI_EMBED_URL:}
     tenant-id: ${PBI_TENANT_ID:}
