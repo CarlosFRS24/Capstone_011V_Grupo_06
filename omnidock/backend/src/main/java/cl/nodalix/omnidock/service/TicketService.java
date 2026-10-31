@@ -22,6 +22,7 @@ public class TicketService {
 
     private final TicketMantenimientoRepository repo;
     private final BahiaRepository bahias;
+    private final ListaEsperaService listaEspera;
 
     @Transactional(readOnly = true)
     public List<TicketMantenimiento> listar(String estado) {
@@ -40,8 +41,11 @@ public class TicketService {
         t.setFechaReporte(Instant.now());
         t.setEstadoTicket(Estados.TK_ABIERTO);
         // Si hay un usuario usando la bahía (OCUPADA) no se le quita: pasará a FUERA_DE_SERVICIO al hacer check-out.
-        if (b.getIdEstado() == Estados.BAHIA_DISPONIBLE || b.getIdEstado() == Estados.BAHIA_RESERVADA)
+        // Si estaba reservada, la reserva se cancela sin falta (o la oferta de la lista vuelve a esperar).
+        if (b.getIdEstado() == Estados.BAHIA_DISPONIBLE || b.getIdEstado() == Estados.BAHIA_RESERVADA) {
             b.setIdEstado(Estados.BAHIA_FUERA_DE_SERVICIO);
+            listaEspera.bahiaRetirada(b);
+        }
         return repo.save(t);
     }
 
@@ -71,8 +75,10 @@ public class TicketService {
     private void liberarBahiaSiCorresponde(Long idBahia) {
         repo.flush();
         bahias.findForUpdate(idBahia).ifPresent(b -> {
-            if (b.getIdEstado() == Estados.BAHIA_FUERA_DE_SERVICIO && !repo.existsByIdBahiaAndEstadoTicketIn(idBahia, ABIERTOS))
+            if (b.getIdEstado() == Estados.BAHIA_FUERA_DE_SERVICIO && !repo.existsByIdBahiaAndEstadoTicketIn(idBahia, ABIERTOS)) {
                 b.setIdEstado(Estados.BAHIA_DISPONIBLE);
+                listaEspera.bahiaLiberada(b);   // se ofrece a la lista de espera
+            }
         });
     }
 }

@@ -2,7 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
-  Bahia, EmbedToken, Historial, Reserva, Ticket, TipoVehiculo, Transaccion, Usuario, Vehiculo,
+  Bahia, EmbedToken, Espera, EsperaAdmin, Falta, Historial, MiEstado, Notificacion, Reserva, ResumenAnalitica, Ticket, TipoVehiculo,
+  Transaccion, Usuario, Vehiculo,
 } from './models';
 
 type Msg = { mensaje: string };
@@ -61,6 +62,20 @@ export class ApiService {
   actualizarUsuario(id: number, u: { idRol?: number; estadoSincronizacion?: string }) { return this.http.put<Msg>(`${U}/usuarios/${id}`, u); }
   eliminarUsuario(id: number) { return this.http.delete<void>(`${U}/usuarios/${id}`); }
 
+  // Estado del usuario, lista de espera, avisos y faltas
+  miEstado() { return this.http.get<MiEstado>(`${U}/mi-estado`); }
+  misFaltas() { return this.http.get<Falta[]>(`${U}/mi-estado/faltas`); }
+  unirseEspera(idVehiculo: number) { return this.http.post<Espera>(`${U}/lista-espera`, { idVehiculo }); }
+  salirEspera() { return this.http.delete<void>(`${U}/lista-espera`); }
+  confirmarEspera() { return this.http.post<Reserva>(`${U}/lista-espera/confirmar`, {}); }
+  esperaActiva() { return this.http.get<EsperaAdmin[]>(`${U}/lista-espera/activa`); }
+  notificaciones() { return this.http.get<Notificacion[]>(`${U}/notificaciones`); }
+  marcarAvisosLeidos() { return this.http.put<{ marcadas: number }>(`${U}/notificaciones/leidas`, {}); }
+  faltasUsuario(id: number) { return this.http.get<Falta[]>(`${U}/usuarios/${id}/faltas`); }
+  desbloquearUsuario(id: number) { return this.http.put<Msg & { faltasAnuladas: number }>(`${U}/usuarios/${id}/desbloquear`, {}); }
+
   // ---- Analítica ----
   embedToken() { return this.http.get<EmbedToken>(`${U}/analitica/embed-token`); }
+  /** datos de los gráficos de Analítica. dias = 7, 30, 90 o 0 (todo). */
+  resumenAnalitica(dias: number) { return this.http.get<ResumenAnalitica>(`${U}/analitica/resumen`, { params: { dias } }); }
 }

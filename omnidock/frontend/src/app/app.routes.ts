@@ -19,6 +19,7 @@ export const routes: Routes = [
       { path: 'sesion', loadComponent: () => import('./pages/app/sesion.page').then((m) => m.SesionPage) },
       { path: 'vehiculos', loadComponent: () => import('./pages/app/vehiculos.page').then((m) => m.VehiculosPage) },
       { path: 'historial', loadComponent: () => import('./pages/app/historial.page').then((m) => m.HistorialPage) },
+      { path: 'avisos', loadComponent: () => import('./pages/app/avisos.page').then((m) => m.AvisosPage) },
     ],
   },
   {

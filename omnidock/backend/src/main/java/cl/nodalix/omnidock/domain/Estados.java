@@ -36,6 +36,24 @@ public final class Estados {
     public static final String TK_RESUELTO = "RESUELTO";
     public static final String TK_ANULADO = "ANULADO";
 
+    // Faltas, lista de espera y avisos
+    public static final String FALTA_VIGENTE = "VIGENTE";
+    public static final String FALTA_ANULADA = "ANULADA";
+
+    public static final String ESP_ESPERANDO = "ESPERANDO";
+    public static final String ESP_OFRECIDA = "OFRECIDA";
+    public static final String ESP_CONFIRMADA = "CONFIRMADA";
+    public static final String ESP_VENCIDA = "VENCIDA";
+    public static final String ESP_CANCELADA = "CANCELADA";
+
+    public static final String NOTIF_FALTA = "FALTA";
+    public static final String NOTIF_BLOQUEO = "BLOQUEO";
+    public static final String NOTIF_DESBLOQUEO = "DESBLOQUEO";
+    public static final String NOTIF_OFERTA = "OFERTA_BAHIA";
+    public static final String NOTIF_OFERTA_VENCIDA = "OFERTA_VENCIDA";
+    public static final String NOTIF_LISTA_CERRADA = "LISTA_CERRADA";
+    public static final String NOTIF_RESERVA_CANCELADA = "RESERVA_CANCELADA";
+
     public static final String CMD_LIBERAR = "LIBERAR_CERROJO";
     public static final String CMD_BLOQUEAR = "BLOQUEAR_CERROJO";
 }

@@ -16,8 +16,13 @@ Opciones utiles:
 
     --url http://localhost:8080     direccion del backend
     --ejecutor "Nombre Apellido"    quien ejecuta (queda en el reporte)
-    --reserva-min 15                minutos de la ventana de reserva esperada
-    --esperar-expiracion            incluye el caso S2-RES-13 (espera la ventana completa)
+    --reserva-min 60                minutos de la ventana de reserva esperada
+    --esperar-expiracion            incluye S2-RES-13 y S4-FAL-05/06 (espera la ventana completa;
+                                    para no esperar 1 hora, levanta el backend con RESERVA_MINUTOS=2
+                                    y ejecuta con --reserva-min 2)
+
+Las reservas solo se aceptan en horario (L-V 07:00-21:30, sab 07:00-15:00).
+Para correr la regresion a cualquier hora levanta el backend con HORARIO_ACTIVO=false.
     --sin-reporte                   solo muestra el resultado en pantalla
 
 Solo usa la biblioteca estandar de Python 3.8 o superior: no hay nada que instalar.
@@ -170,7 +175,26 @@ PLAN = [
     ("S3-IOT-03", "Simulador IoT", "HU-03/RF-03", "Simulador envía ALERTA_FALLA", "200; bahía FUERA_DE_SERVICIO"),
     ("S3-IOT-04", "Simulador IoT", "HU-03/HU-07", "Reservar una bahía que recibió alerta de falla", "409"),
 
-    ("S4-ANA-01", "Analítica", "HU-11/RF-11", "Administrador pide los datos de embebido de Power BI", "200 con URL"),
+    ("S4-ANA-01", "Analítica", "HU-11/RF-11", "Administrador pide los datos de embebido de Power BI (opcional)", "200 con URL, o 503 si no está configurado"),
+    ("S4-ANA-02", "Analítica", "HU-11/RF-11", "Administrador pide los datos de los gráficos (30 días)", "200; indicadores, serie por día y 16 horas (07 a 22)"),
+    ("S4-ANA-03", "Analítica", "HU-11/RF-11", "Período no permitido (dias=15)", "400"),
+    ("S4-ANA-04", "Analítica", "HU-11/RF-11", "Usuario final pide los datos de los gráficos", "403"),
+
+    ("S4-EST-01", "Faltas, lista de espera y avisos", "Sprint 4", "Usuario consulta su estado (mi-estado)", "200; 0 de 3 faltas; ventana configurada; horario"),
+    ("S4-ESP-01", "Faltas, lista de espera y avisos", "Sprint 4", "Unirse a la lista de espera habiendo bahías libres", "409"),
+    ("S4-ESP-02", "Faltas, lista de espera y avisos", "Sprint 4", "Salir de la lista sin estar en ella", "404"),
+    ("S4-ESP-03", "Faltas, lista de espera y avisos", "Sprint 4", "Confirmar una bahía sin tener oferta", "404"),
+    ("S4-ESP-04", "Faltas, lista de espera y avisos", "Sprint 4", "Consultar mi lugar sin estar en la lista", "204"),
+    ("S4-ESP-05", "Faltas, lista de espera y avisos", "Sprint 4", "Usuario final pide la lista de espera completa", "403 (solo admin); admin 200"),
+    ("S4-RES-14", "Faltas, lista de espera y avisos", "Sprint 4", "Ticket sobre una bahía reservada", "Reserva CANCELADA sin falta, bahía FUERA_DE_SERVICIO y aviso al usuario"),
+    ("S4-NOT-01", "Faltas, lista de espera y avisos", "Sprint 4", "Marcar avisos como leídos", "200; 0 sin leer"),
+    ("S4-NOT-02", "Faltas, lista de espera y avisos", "Sprint 4", "Usuario B marca un aviso del usuario A", "403"),
+    ("S4-FAL-01", "Faltas, lista de espera y avisos", "Sprint 4", "Administrador ve las faltas de un usuario sin faltas", "200 lista vacía"),
+    ("S4-FAL-02", "Faltas, lista de espera y avisos", "Sprint 4", "Desbloquear a un usuario sin faltas", "409"),
+    ("S4-FAL-03", "Faltas, lista de espera y avisos", "Sprint 4", "Usuario final usa la ruta de faltas del admin", "403; su propia ruta 200"),
+    ("S4-FAL-04", "Faltas, lista de espera y avisos", "Sprint 4", "Lista de usuarios con faltas vigentes", "200; cada usuario trae faltasVigentes"),
+    ("S4-FAL-05", "Faltas, lista de espera y avisos", "Sprint 4", "Reserva vencida sin check-in deja una falta", "1 de 3 faltas y aviso FALTA"),
+    ("S4-FAL-06", "Faltas, lista de espera y avisos", "Sprint 4", "Administrador desbloquea (anula faltas)", "200, 1 anulada; vuelve a 0"),
 ]
 INFO = {c[0]: c for c in PLAN}
 MODULOS = []
@@ -404,6 +428,13 @@ def ejecutar(args):
         quien[u["token"]] = etiqueta
     if not (A["token"] and B["token"] and COLAB["token"]):
         sys.exit("\nLos usuarios de prueba no pudieron iniciar sesion. Sin ellos no se puede seguir.")
+    # Sprint 4: fuera del horario de reservas casi todos los casos de reservas fallarian
+    horario = (api("GET", "/api/v1/mi-estado", A["token"]).campo("horario") or {})
+    if horario and not horario.get("reservasAbiertas", True):
+        for u in (A, B, COLAB):
+            api("DELETE", "/api/v1/usuarios/%s" % u["id"], admin)
+        sys.exit("\nAhora el backend no acepta reservas: %s\nPara correr la regresion a cualquier hora, levanta el backend con "
+                 "HORARIO_ACTIVO=false." % horario.get("mensaje", "fuera de horario"))
 
     caso("S2-AUTH-03")
     r3 = login(A["email"], "clave-incorrecta-" + corrida)
@@ -885,9 +916,105 @@ def ejecutar(args):
     caso("S4-ANA-01")
     r = api("GET", "/api/v1/analitica/embed-token", admin)
     if r.status == 503:
-        reg("S4-ANA-01", False, r.breve(), r.ms, resultado="No aplica todavía")
+        reg("S4-ANA-01", True, r.breve() + " (Power BI no configurado; el panel usa sus gráficos, CC-24)", r.ms)
     else:
         reg("S4-ANA-01", r.status == 200 and bool(r.campo("embedUrl")), "%s%s" % (r.breve(), " con URL" if r.campo("embedUrl") else ""), r.ms)
+    caso("S4-ANA-02")
+    r = api("GET", "/api/v1/analitica/resumen", admin, params={"dias": 30})
+    ind = r.campo("indicadores") or {}
+    horas = r.campo("usoPorHora") or []
+    ok = r.status == 200 and "reservas" in ind and r.campo("agrupacion") == "DIA" and len(horas) >= 16
+    reg("S4-ANA-02", ok, "%s; %s reservas, %s usos, %s horas" % (r.breve(), ind.get("reservas"), ind.get("usos"), len(horas)), r.ms)
+    caso("S4-ANA-03")
+    r = api("GET", "/api/v1/analitica/resumen", admin, params={"dias": 15})
+    reg("S4-ANA-03", r.status == 400, r.breve(), r.ms)
+    caso("S4-ANA-04")
+    r = api("GET", "/api/v1/analitica/resumen", A["token"], params={"dias": 30})
+    reg("S4-ANA-04", r.status == 403, r.breve(), r.ms)
+
+    # ---------------- Sprint 4: faltas, lista de espera y avisos ----------------
+    print("\nFaltas, lista de espera y avisos")
+    caso("PREPARACION")
+    for x in (api("GET", "/api/v1/reservas/usuario/%s" % A["id"], A["token"]).cuerpo or []):
+        api("PUT", "/api/v1/reservas/%s/cancelar" % x.get("idReserva"), A["token"])
+    b3 = {"codigo": "QA-%s-B3" % corrida, "mac": mac()}
+    r = api("POST", "/api/v1/bahias", admin, {"codigoIot": b3["codigo"], "ubicacion": ubic, "idEstado": 1, "idTipoPermitido": 1, "direccionMac": b3["mac"]})
+    b3["id"] = r.campo("idBahia")
+    if b3["id"] is not None:
+        CREADOS.append("Bahía %s (bicicleta), ID %s, con dispositivo IoT" % (b3["codigo"], b3["id"]))
+
+    caso("S4-EST-01")
+    r = api("GET", "/api/v1/mi-estado", A["token"])
+    ok = (r.status == 200 and r.campo("maxFaltas") == 3 and r.campo("faltasVigentes") == 0 and r.campo("reservasBloqueadas") is False
+          and r.campo("minutosReserva") == args.reserva_min and bool((r.campo("horario") or {}).get("mensaje")))
+    reg("S4-EST-01", ok, "%s; %s de %s faltas; ventana %s min" % (r.status, r.campo("faltasVigentes"), r.campo("maxFaltas"), r.campo("minutosReserva")), r.ms)
+    caso("S4-ESP-01")
+    r = api("POST", "/api/v1/lista-espera", A["token"], {"idVehiculo": bici_a})
+    reg("S4-ESP-01", r.status == 409, r.breve(), r.ms)
+    if r.status == 201:
+        api("DELETE", "/api/v1/lista-espera", A["token"])
+    caso("S4-ESP-02")
+    r = api("DELETE", "/api/v1/lista-espera", A["token"])
+    reg("S4-ESP-02", r.status == 404, r.breve(), r.ms)
+    caso("S4-ESP-03")
+    r = api("POST", "/api/v1/lista-espera/confirmar", A["token"])
+    reg("S4-ESP-03", r.status == 404, r.breve(), r.ms)
+    caso("S4-ESP-04")
+    r = api("GET", "/api/v1/lista-espera/mia", A["token"])
+    reg("S4-ESP-04", r.status == 204, r.breve(), r.ms)
+    caso("S4-ESP-05")
+    r = api("GET", "/api/v1/lista-espera/activa", A["token"])
+    r2 = api("GET", "/api/v1/lista-espera/activa", admin)
+    reg("S4-ESP-05", r.status == 403 and r2.status == 200, "usuario %s; admin %s" % (r.breve(), r2.breve()), r.ms)
+
+    caso("S4-RES-14")
+    if b3["id"] is None:
+        reg("S4-RES-14", False, "No se pudo crear la bahía de prueba")
+    else:
+        r = api("POST", "/api/v1/reservas", A["token"], {"idBahia": b3["id"], "idVehiculo": bici_a})
+        res14 = r.campo("idReserva")
+        if res14 is None:
+            reg("S4-RES-14", False, "No se pudo crear la reserva: %s" % r.breve(), r.ms)
+        else:
+            CREADOS.append("Reserva %s del usuario A (cancelada por ticket)" % res14)
+            rt = api("POST", "/api/v1/tickets", admin, {"idBahia": b3["id"], "descripcionFalla": "QA regresion %s: falla sobre bahía reservada" % corrida})
+            pendientes = api("GET", "/api/v1/reservas/usuario/%s" % A["id"], A["token"]).cuerpo
+            e = estado_bahia(admin, b3["id"])
+            avisos = api("GET", "/api/v1/notificaciones", A["token"]).cuerpo or []
+            hay_aviso = any(x.get("tipo") == "RESERVA_CANCELADA" for x in avisos if isinstance(x, dict))
+            faltas = api("GET", "/api/v1/mi-estado", A["token"]).campo("faltasVigentes")
+            ok = rt.status == 201 and pendientes == [] and e == FUERA_DE_SERVICIO and hay_aviso and faltas == 0
+            reg("S4-RES-14", ok, "ticket %s; %s reservas pendientes; bahía %s; aviso %s; faltas %s" % (
+                rt.status, "sin" if pendientes == [] else "CON", nom(e), "sí" if hay_aviso else "NO", faltas), rt.ms)
+
+    caso("S4-NOT-02")
+    avisos = api("GET", "/api/v1/notificaciones", A["token"]).cuerpo or []
+    id_aviso = avisos[0].get("idNotificacion") if avisos and isinstance(avisos[0], dict) else None
+    if id_aviso is None:
+        reg("S4-NOT-02", False, "El usuario A no tiene avisos para probar")
+    else:
+        r = api("PUT", "/api/v1/notificaciones/%s/leida" % id_aviso, B["token"])
+        reg("S4-NOT-02", r.status == 403, r.breve(), r.ms)
+    caso("S4-NOT-01")
+    r = api("PUT", "/api/v1/notificaciones/leidas", A["token"])
+    sin_leer = api("GET", "/api/v1/mi-estado", A["token"]).campo("notificacionesNoLeidas")
+    reg("S4-NOT-01", r.status == 200 and sin_leer == 0, "%s; %s sin leer" % (r.breve(), sin_leer), r.ms)
+
+    caso("S4-FAL-01")
+    r = api("GET", "/api/v1/usuarios/%s/faltas" % A["id"], admin)
+    reg("S4-FAL-01", r.status == 200 and r.cuerpo == [], "%s con %s" % (r.status, len(r.cuerpo) if isinstance(r.cuerpo, list) else "?"), r.ms)
+    caso("S4-FAL-02")
+    r = api("PUT", "/api/v1/usuarios/%s/desbloquear" % A["id"], admin)
+    reg("S4-FAL-02", r.status == 409, r.breve(), r.ms)
+    caso("S4-FAL-03")
+    r = api("GET", "/api/v1/usuarios/%s/faltas" % A["id"], A["token"])
+    r2 = api("GET", "/api/v1/mi-estado/faltas", A["token"])
+    reg("S4-FAL-03", r.status == 403 and r2.status == 200, "ruta admin %s; propia %s" % (r.breve(), r2.breve()), r.ms)
+    caso("S4-FAL-04")
+    r = api("GET", "/api/v1/usuarios", admin)
+    lista = r.cuerpo if isinstance(r.cuerpo, list) else []
+    reg("S4-FAL-04", r.status == 200 and lista and all("faltasVigentes" in x for x in lista),
+        "%s, %d usuarios%s" % (r.status, len(lista), "" if all("faltasVigentes" in x for x in lista) else " SIN faltasVigentes"), r.ms)
 
     # ---------------- Expiracion de la reserva (opcional) ----------------
     if args.esperar_expiracion:
@@ -913,9 +1040,23 @@ def ejecutar(args):
             ok = pendientes == [] and e == DISPONIBLE and r.status == 409 and "EXPIRADA" in r.mensaje
             reg("S2-RES-13", ok, "A los %d min: %s reservas pendientes; bahía %s; check-in tardío %s" % (
                 args.reserva_min, "sin" if pendientes == [] else "CON", nom(e), r.breve()))
+
+            # Sprint 4: la reserva vencida deja una falta y el admin la puede anular
+            caso("S4-FAL-05")
+            est = api("GET", "/api/v1/mi-estado", A["token"])
+            avisos = api("GET", "/api/v1/notificaciones", A["token"]).cuerpo or []
+            hay_aviso = any(x.get("tipo") == "FALTA" for x in avisos if isinstance(x, dict))
+            reg("S4-FAL-05", est.campo("faltasVigentes") == 1 and hay_aviso,
+                "%s de %s faltas; aviso %s" % (est.campo("faltasVigentes"), est.campo("maxFaltas"), "sí" if hay_aviso else "NO"), est.ms)
+            caso("S4-FAL-06")
+            r = api("PUT", "/api/v1/usuarios/%s/desbloquear" % A["id"], admin)
+            despues = api("GET", "/api/v1/mi-estado", A["token"]).campo("faltasVigentes")
+            reg("S4-FAL-06", r.status == 200 and r.campo("faltasAnuladas") == 1 and despues == 0,
+                "%s; %s anuladas; quedan %s" % (r.breve(), r.campo("faltasAnuladas"), despues), r.ms)
     else:
-        RESULTADOS["S2-RES-13"] = {"obtenido": "Requiere esperar la ventana completa; ejecutar con --esperar-expiracion",
-                                   "ms": None, "resultado": "Omitido"}
+        for c in ("S2-RES-13", "S4-FAL-05", "S4-FAL-06"):
+            RESULTADOS[c] = {"obtenido": "Requiere esperar la ventana completa; ejecutar con --esperar-expiracion",
+                             "ms": None, "resultado": "Omitido"}
 
     # ---------------- Cierre: borrado logico de la bahia y limpieza ----------------
     print("\nBahías: borrado lógico")
@@ -925,6 +1066,8 @@ def ejecutar(args):
     reg("S2-BAH-12", r.status == 204 and e == FUERA_DE_SERVICIO, "%s; bahía %s" % (r.status, nom(e)), r.ms)
     caso("LIMPIEZA")
     api("DELETE", "/api/v1/bahias/%s" % b2["id"], admin)
+    if b3.get("id") is not None:
+        api("DELETE", "/api/v1/bahias/%s" % b3["id"], admin)
     for u in (A, B, COLAB):
         api("DELETE", "/api/v1/usuarios/%s" % u["id"], admin)
     return ctx
@@ -1037,7 +1180,7 @@ def main():
     p = argparse.ArgumentParser(description="Regresion de la API de OmniDock")
     p.add_argument("--url", default=os.environ.get("OMNIDOCK_URL", "http://localhost:8080"), help="direccion del backend")
     p.add_argument("--ejecutor", default=os.environ.get("OMNIDOCK_EJECUTOR") or getpass.getuser(), help="quien ejecuta las pruebas")
-    p.add_argument("--reserva-min", type=int, default=int(os.environ.get("RESERVA_MINUTOS", "15")), help="minutos de la ventana de reserva esperada")
+    p.add_argument("--reserva-min", type=int, default=int(os.environ.get("RESERVA_MINUTOS", "60")), help="minutos de la ventana de reserva esperada")
     p.add_argument("--esperar-expiracion", action="store_true", help="incluye S2-RES-13 (espera la ventana de reserva completa)")
     p.add_argument("--sin-reporte", action="store_true", help="no escribe archivos en docs/qa")
     args = p.parse_args()

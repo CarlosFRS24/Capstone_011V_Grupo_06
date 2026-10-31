@@ -26,6 +26,7 @@ public class TransaccionService {
     private final DispositivoIotRepository dispositivos;
     private final TicketMantenimientoRepository tickets;
     private final IotClient iot;
+    private final ListaEsperaService listaEspera;
 
     /** Check-in (RF-07): valida reserva, abre el cerrojo en el simulador y deja la transacción ACTIVA. */
     @Transactional
@@ -85,6 +86,7 @@ public class TransaccionService {
             boolean ticketAbierto = tickets.existsByIdBahiaAndEstadoTicketIn(b.getIdBahia(),
                     List.of(Estados.TK_ABIERTO, Estados.TK_EN_REVISION));
             b.setIdEstado(ticketAbierto ? Estados.BAHIA_FUERA_DE_SERVICIO : Estados.BAHIA_DISPONIBLE);
+            listaEspera.bahiaLiberada(b);   // si hay alguien esperando, se le ofrece
         }
         return new TransaccionDto(t.getIdTransaccion(), t.getFechaInicio(), t.getFechaFin(), t.getEstadoTransaccion());
     }

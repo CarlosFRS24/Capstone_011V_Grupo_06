@@ -6,6 +6,7 @@ export interface Usuario {
   emailInstitucional?: string;
   idRol: number;
   estadoSincronizacion: string;
+  faltasVigentes?: number;   // Solo en la lista de usuarios del panel
 }
 export interface LoginResponse { token: string; usuario: Usuario; }
 
@@ -32,7 +33,43 @@ export interface Ticket {
   idTicket: number; idBahia: number; reportadoPor: number; descripcionFalla: string;
   fechaReporte: string; fechaResolucion?: string; estadoTicket: string;
 }
+// Horario, faltas, lista de espera y avisos
+export interface Horario {
+  activo: boolean; reservasAbiertas: boolean; reservaDesde?: string; reservaHasta?: string; cierre?: string; mensaje: string;
+}
+export interface Espera {
+  idEspera: number; estadoEspera: 'ESPERANDO' | 'OFRECIDA' | string; idVehiculo: number; idTipoVehiculo: number;
+  posicion?: number; fechaRegistro: string; idBahiaOfrecida?: number; codigoIot?: string; ubicacion?: string;
+  fechaLimiteOferta?: string; idReserva?: number;
+}
+export interface EsperaAdmin {
+  idEspera: number; idUsuario: number; nombreCompleto?: string; vehiculo?: string; idTipoVehiculo: number;
+  estadoEspera: string; posicion?: number; fechaRegistro: string; codigoIot?: string; fechaLimiteOferta?: string;
+}
+export interface MiEstado {
+  faltasVigentes: number; maxFaltas: number; reservasBloqueadas: boolean; minutosReserva: number;
+  horario: Horario; espera?: Espera; notificacionesNoLeidas: number;
+}
+export interface Notificacion { idNotificacion: number; tipo: string; mensaje: string; fechaCreacion: string; leida: boolean; }
+export interface Falta { idFalta: number; idReserva: number; codigoIot?: string; fechaFalta: string; estadoFalta: string; fechaAnulacion?: string; }
+
 export interface EmbedToken { embedToken?: string; tokenExpiry?: string; reportId?: string; embedUrl: string; }
+
+// Datos de los gráficos propios de Analítica (GET /analitica/resumen)
+export interface Conteo { etiqueta: string; valor: number; }
+export interface PuntoSerie { fecha: string; reservas: number; usos: number; faltas: number; }
+export interface SectorTipo { sector: string; tipo: string; bahias: number; usos: number; }
+export interface BahiaTop { codigoIot: string; sector: string; usos: number; minutosPromedio?: number; }
+export interface Indicadores {
+  reservas: number; usos: number; pctConcretadas: number; faltas: number; pctFaltas: number;
+  minutosUsoPromedio?: number; minutosLlegadaPromedio?: number; usuariosActivos: number;
+  esperas: number; pctEsperaConfirmada: number; minutosEsperaPromedio?: number; usuariosBloqueados: number;
+}
+export interface ResumenAnalitica {
+  dias: number; desde?: string; hasta?: string; agrupacion: 'DIA' | 'SEMANA'; indicadores: Indicadores;
+  serie: PuntoSerie[]; usoPorHora: Conteo[]; usoPorDia: Conteo[]; porSector: SectorTipo[];
+  estadosReserva: Conteo[]; listaEspera: Conteo[]; topBahias: BahiaTop[];
+}
 
 // Catálogos (IDs según Insert_SQL)
 export const ESTADO_BAHIA: Record<number, string> = { 1: 'Disponible', 2: 'Reservada', 3: 'Ocupada', 4: 'Fuera de servicio' };
