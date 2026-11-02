@@ -1,10 +1,10 @@
 # Product Backlog
 
-El backlog lo llevamos en Jira. Aquí está el resumen al 17/10/2026, sacado de la exportación de ese día (`../gestion/jira/nodalix_2026-10-17_06.41pm.csv`). En Jira "Kris" es Crisler Romero y "f.vidalv" es Felipe Vidal.
+El backlog lo llevamos en Jira. Aquí está el resumen al cierre del proyecto (01/11/2026), sacado de la exportación final (`../../omnidock/docs/gestion/jira/nodalix_2026-11-01_09.36pm.csv`). En Jira "Kris" es Crisler Romero y "f.vidalv" es Felipe Vidal.
 
 ## Historias de usuario
 
-Son 11. Los criterios de aceptación están en el ERS (anexo 5.4). No usamos puntos de historia; planificamos por horas por sprint (ERS, sección 4.1.5).
+Son 14 (las HU-12 a HU-14 se agregaron en el Sprint 4, después de la presentación del 23/10). Los criterios de aceptación están en el ERS v1.4 (anexo 5.4). No usamos puntos de historia; planificamos por horas por sprint (ERS, sección 4.1.5).
 
 | Historia | Jira | Sprint | Estado |
 | --- | --- | --- | --- |
@@ -12,13 +12,16 @@ Son 11. Los criterios de aceptación están en el ERS (anexo 5.4). No usamos pun
 | HU-02 Asignación inteligente por vehículo | KAN-69 | 2 y 3 | Terminada |
 | HU-03 Comunicación con infraestructura física (IoT) | KAN-70 | 3 | Terminada |
 | HU-04 Trazabilidad e inmutabilidad | KAN-71 | 2 | Terminada |
-| HU-05 Pipeline de datos para reportes | KAN-72 | 4 | Por hacer (vistas y conexión a Power BI listas) |
+| HU-05 Pipeline de datos para reportes | KAN-72 | 4 | Terminada |
 | HU-06 Consulta de bahías disponibles | KAN-35 | 3 | Terminada |
 | HU-07 Escaneo QR e inicio de sesión de uso | KAN-36 | 3 | Terminada |
 | HU-08 Historial de uso | KAN-37 | 3 | Terminada |
 | HU-09 Gestión y monitoreo de racks | KAN-38 | 3 | Terminada |
 | HU-10 Usuarios y permisos | KAN-39 | 3 | Terminada |
-| HU-11 Dashboards de Power BI en el panel | KAN-40 | 4 | Por hacer |
+| HU-11 Analítica en el panel (gráficos propios; Power BI embebido opcional) | KAN-40 | 4 | Terminada (CC-24) |
+| HU-12 Lista de espera | KAN-90 | 4 | Terminada |
+| HU-13 Control de inasistencias (faltas) | KAN-91 | 4 | Terminada |
+| HU-14 Avisos en la app | KAN-92 | 4 | Terminada |
 
 ## Épicas
 
@@ -29,18 +32,18 @@ Son 11. Los criterios de aceptación están en el ERS (anexo 5.4). No usamos pun
 | KAN-5 Core Backend y Seguridad | CRUD en Java, JWT, base de datos y HU-01, HU-02 y HU-04 | Terminada |
 | KAN-6 Integración IoT & UI | Pantallas, integración y HU-03 | Terminada |
 | KAN-41 Aplicación Móvil | HU-06, HU-07 y HU-08 | Terminada |
-| KAN-42 Plataforma Web | HU-09 y HU-10 terminadas; falta HU-11 | En curso |
-| KAN-26 Analítica y Cierre | Tareas de datos del Sprint 3 (terminadas) y las del Sprint 4 | En curso |
+| KAN-42 Plataforma Web | HU-09, HU-10 y HU-11 | Terminada |
+| KAN-26 Analítica y Cierre | Tareas de datos del Sprint 3 (terminadas), las del Sprint 4 y los cambios de la presentación (HU-12 a HU-14, KAN-90 a KAN-105) | Terminada |
 
 ## Avance
 
-De las 35 tareas e historias del proyecto hay 30 terminadas. Quedan las 5 del Sprint 4: KAN-27, KAN-28, KAN-29, KAN-40 y KAN-72.
+Al 17/10, de las 35 tareas e historias del proyecto había 30 terminadas y quedaban las 5 del Sprint 4: KAN-27, KAN-28, KAN-29, KAN-40 y KAN-72. Después de la presentación del 23/10 se sumaron 3 historias (HU-12 a HU-14) y 13 tareas (KAN-90 a KAN-105). Al cierre (01/11) las 51 tareas e historias están terminadas.
 
-## Pendientes que no están en Jira
+## Otros puntos fuera de Jira
 
 | Qué | Estado |
 | --- | --- |
-| Ampliar la ventana de reserva (hoy 15 minutos) | Falta decidir los minutos |
-| `.gitignore` en la raíz (la carpeta `wallet/` no se sube) | Pendiente |
-| Contraseñas de prueba en texto plano en `02_insert.sql` (DEF-07) | Pendiente |
-| Mockups del ERS sin perfil ni NFC (anexo 5.5) | Pendiente |
+| Ampliar la ventana de reserva | Hecho en el Sprint 4: 60 minutos (CC-18) |
+| `.gitignore` en la raíz (la carpeta `wallet/` no se sube) | Hecho |
+| Contraseñas de prueba en texto plano en `02_insert.sql` (DEF-07) | Aceptado: son datos de prueba del prototipo |
+| Mockups del ERS sin perfil ni NFC (anexo 5.5) | No se actualizan: perfil y NFC quedaron fuera del prototipo. Las pantallas nuevas del Sprint 4 están como capturas en el anexo 5.5.3 |

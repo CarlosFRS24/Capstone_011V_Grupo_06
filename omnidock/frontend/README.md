@@ -7,7 +7,7 @@ Un solo proyecto contiene las dos interfaces de OmniDock:
 
 Al iniciar sesión, cada persona entra a su parte según su rol.
 
-Está hecho con **Ionic y Angular**, y **Capacitor** genera la app de Android desde el mismo código. El diseño sigue los mockups de Figma (sin la pantalla de perfil ni NFC, que quedaron fuera del alcance).
+Está hecho con **Ionic y Angular**, y **Capacitor** genera la app de Android desde el mismo código. El diseño sigue los mockups de Figma.
 
 ## Qué se necesita
 

@@ -22,7 +22,7 @@ Las 3 tareas, y las 4 subtareas de la base de datos, se terminaron dentro del sp
 
 En este sprint no hubo código, así que revisamos los documentos y el modelo. La revisión la hicimos el 02/10 y el 03/10.
 
-- **Bien:** cada requisito tiene su historia de usuario, el alcance está definido y las 11 tablas tienen sus claves (11 primarias y 15 foráneas).
+- **Bien:** cada requisito tiene su historia de usuario, el alcance está definido y las 11 tablas tienen sus claves (11 primarias y 16 foráneas).
 - **Por corregir:** los criterios de aceptación de la HU-02, y los estados no estaban restringidos en la base de datos (faltaban los CHECK).
 - **Pendiente:** nueve anexos del ERS seguían con el texto de la plantilla, y en Jira faltaba cargar las historias HU-01 a HU-05.
 

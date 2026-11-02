@@ -33,24 +33,20 @@ En pantalla muestra cada caso a medida que lo ejecuta y un resumen al final. Ter
 | --- | --- |
 | `--url http://localhost:8080` | Dirección del backend |
 | `--ejecutor "Nombre"` | Quién ejecuta; queda en el reporte |
-| `--reserva-min 15` | Minutos de la ventana de reserva que se espera |
-| `--esperar-expiracion` | Incluye el caso `S2-RES-13`, que espera la ventana de reserva completa (unos 16 minutos) |
+| `--reserva-min 60` | Minutos de la ventana de reserva que se espera (por defecto toma `RESERVA_MINUTOS` o 60) |
+| `--esperar-expiracion` | Incluye `S2-RES-13`, `S4-FAL-05` y `S4-FAL-06`, que esperan a que venza una reserva. Conviene levantar el backend con `RESERVA_MINUTOS=2` y usar `--reserva-min 2` |
 | `--sin-reporte` | Solo muestra el resultado en pantalla |
 
 ## Datos y credenciales
 
-- El script no toca los datos existentes. Crea sus propios usuarios, bahías, vehículos, reservas y tickets, todos con el prefijo `QA`, y al final los deja desactivados. Como el sistema no borra físicamente (RF-04), esos registros quedan en la base hasta que se recargue con los scripts `00` a `03`.
+- El script no toca los datos existentes. Crea sus propios usuarios, bahías, vehículos, reservas y tickets, todos con el prefijo `QA`, y al final los deja desactivados. Como el sistema no borra físicamente (RF-04), esos registros quedan en la base hasta que se recargue la base (`00` → `01` → `02` → `03` → `04` → `06`).
 - La clave del administrador se toma de las variables de entorno `OMNIDOCK_ADMIN_EMAIL` y `OMNIDOCK_ADMIN_PASSWORD`. Si no existen, se lee del primer administrador de `database/02_insert.sql`.
 - La llave de los dispositivos IoT se toma de `IOT_API_KEY` o de `application.yml`.
 - Ninguna clave ni token se escribe en el reporte ni en pantalla.
 
 ## Casos
 
-97 casos en 11 módulos: autenticación, roles y permisos, bahías, vehículos, reservas, check-in y check-out, tickets, usuarios, documentación, simulador IoT y analítica. El plan completo está al inicio del script, en la lista `PLAN`.
-
-- `S2-USR-08` falla mientras siga abierto el defecto DEF-03 (el token de un usuario bloqueado sigue vigente). El script lo informa como falla conocida.
-- `S4-ANA-01` queda como "No aplica todavía" mientras Power BI no esté configurado.
-- `S2-TKT-07` a `S2-TKT-10` cubren el ciclo de un ticket (listar, resolver, anular). Se definieron al escribir este script, porque de la re-ejecución del 02/10 no quedó el detalle.
+115 casos en 12 módulos: autenticación, roles y permisos, bahías, vehículos, reservas, check-in y check-out, tickets, usuarios, documentación, simulador IoT, analítica, y faltas, lista de espera y avisos. El plan completo está al inicio del script, en la lista `PLAN`.
 
 # Prueba de carga
 

@@ -3,7 +3,8 @@
 -- AUTOR: Crisler Romero (Arquitectura de Datos y BI)
 -- Modelo en estrella hecho con vistas sobre las tablas transaccionales:
 --   4 dimensiones: V_DIM_FECHA, V_DIM_BAHIA, V_DIM_USUARIO, V_DIM_VEHICULO
---   4 hechos:      V_HECHO_USO, V_HECHO_RESERVA, V_HECHO_TICKET, V_HECHO_EVENTO_IOT
+--   6 hechos:      V_HECHO_USO, V_HECHO_RESERVA, V_HECHO_TICKET, V_HECHO_EVENTO_IOT,
+--                  V_HECHO_FALTA y V_HECHO_LISTA_ESPERA
 -- ==============================================================================
 
 
@@ -29,6 +30,7 @@ CREATE OR REPLACE VIEW V_DIM_BAHIA AS
 SELECT b.ID_BAHIA,
        b.CODIGO_IOT,
        b.UBICACION,
+       CASE WHEN INSTR(b.UBICACION, ' - ') > 0 THEN SUBSTR(b.UBICACION, INSTR(b.UBICACION, ' - ') + 3) ELSE b.UBICACION END AS SECTOR,
        tv.NOMBRE_TIPO AS TIPO_PERMITIDO,
        e.NOMBRE_ESTADO AS ESTADO_ACTUAL,
        d.ESTADO_CONEXION,
@@ -145,3 +147,56 @@ SELECT x.ID_LOG,
                JSON_VALUE(l.PAYLOAD_RECIBIDO, '$.bateria' RETURNING NUMBER NULL ON ERROR) AS BATERIA
           FROM LOG_EVENTO_IOT l
           JOIN DISPOSITIVO_IOT d ON d.ID_DISPOSITIVO = l.ID_DISPOSITIVO) x;
+
+
+-- CONTROL DE USO: FALTAS Y LISTA DE ESPERA
+
+-- Faltas por no llegar a la reserva
+-- ANULADA = el administrador la anulo al desbloquear al usuario
+CREATE OR REPLACE VIEW V_HECHO_FALTA AS
+SELECT x.ID_FALTA,
+       x.ID_USUARIO,
+       x.ID_RESERVA,
+       x.ID_BAHIA,
+       TRUNC(x.FALTA_LOCAL) AS FECHA,
+       TO_NUMBER(TO_CHAR(x.FALTA_LOCAL, 'HH24')) AS HORA_FALTA,
+       x.FALTA_LOCAL,
+       x.ESTADO_FALTA,
+       ROUND((CAST(x.FECHA_ANULACION AS DATE) - CAST(x.FECHA_FALTA AS DATE)) * 24, 1) AS HORAS_HASTA_ANULACION
+  FROM (SELECT f.ID_FALTA,
+               f.ID_USUARIO,
+               f.ID_RESERVA,
+               r.ID_BAHIA,
+               f.ESTADO_FALTA,
+               f.FECHA_FALTA,
+               f.FECHA_ANULACION,
+               CAST(FROM_TZ(f.FECHA_FALTA, 'UTC') AT TIME ZONE 'America/Santiago' AS DATE) AS FALTA_LOCAL
+          FROM FALTA_RESERVA f
+          JOIN RESERVA r ON r.ID_RESERVA = f.ID_RESERVA) x;
+
+-- Lista de espera: demanda que no encontro bahia libre
+-- MINUTOS_ESPERA es lo que espero hasta que se le ofrecio una bahia (vacio si nunca se le ofrecio)
+CREATE OR REPLACE VIEW V_HECHO_LISTA_ESPERA AS
+SELECT x.ID_ESPERA,
+       x.ID_USUARIO,
+       x.ID_VEHICULO,
+       x.TIPO_VEHICULO,
+       x.ID_BAHIA_OFRECIDA AS ID_BAHIA,
+       x.ID_RESERVA,
+       TRUNC(x.REGISTRO_LOCAL) AS FECHA,
+       TO_NUMBER(TO_CHAR(x.REGISTRO_LOCAL, 'HH24')) AS HORA_REGISTRO,
+       x.REGISTRO_LOCAL,
+       x.ESTADO_ESPERA,
+       ROUND((CAST(x.FECHA_OFERTA AS DATE) - CAST(x.FECHA_REGISTRO AS DATE)) * 1440) AS MINUTOS_ESPERA
+  FROM (SELECT l.ID_ESPERA,
+               l.ID_USUARIO,
+               l.ID_VEHICULO,
+               tv.NOMBRE_TIPO AS TIPO_VEHICULO,
+               l.ID_BAHIA_OFRECIDA,
+               l.ID_RESERVA,
+               l.ESTADO_ESPERA,
+               l.FECHA_REGISTRO,
+               l.FECHA_OFERTA,
+               CAST(FROM_TZ(l.FECHA_REGISTRO, 'UTC') AT TIME ZONE 'America/Santiago' AS DATE) AS REGISTRO_LOCAL
+          FROM LISTA_ESPERA l
+          JOIN TIPO_VEHICULO tv ON tv.ID_TIPO_VEHICULO = l.ID_TIPO_VEHICULO) x;

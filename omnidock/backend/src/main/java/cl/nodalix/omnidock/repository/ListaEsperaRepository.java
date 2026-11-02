@@ -25,5 +25,8 @@ public interface ListaEsperaRepository extends JpaRepository<ListaEspera, Long> 
     List<ListaEspera> findByIdBahiaOfrecidaAndEstadoEspera(Long idBahia, String estado);
     boolean existsByIdBahiaOfrecidaAndEstadoEspera(Long idBahia, String estado);
     Optional<ListaEspera> findFirstByIdUsuarioAndEstadoEsperaIn(Long idUsuario, Collection<String> estados);
-    long countByEstadoEsperaAndIdTipoVehiculoAndFechaRegistroBefore(String estado, Long idTipoVehiculo, Instant fecha);
+    // Cuántos esperan antes que esta inscripción; excluye la propia porque Oracle guarda la fecha
+    // con menos precisión que el Instant en memoria y el registro recién creado se contaba a sí mismo (DEF-10)
+    long countByEstadoEsperaAndIdTipoVehiculoAndFechaRegistroBeforeAndIdEsperaNot(
+            String estado, Long idTipoVehiculo, Instant fecha, Long idEspera);
 }

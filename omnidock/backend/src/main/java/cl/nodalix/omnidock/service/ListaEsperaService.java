@@ -292,8 +292,8 @@ public class ListaEsperaService {
     private EsperaDto dto(ListaEspera e) {
         Integer posicion = null;
         if (Estados.ESP_ESPERANDO.equals(e.getEstadoEspera())) {
-            posicion = (int) repo.countByEstadoEsperaAndIdTipoVehiculoAndFechaRegistroBefore(
-                    Estados.ESP_ESPERANDO, e.getIdTipoVehiculo(), e.getFechaRegistro()) + 1;
+            posicion = (int) repo.countByEstadoEsperaAndIdTipoVehiculoAndFechaRegistroBeforeAndIdEsperaNot(
+                    Estados.ESP_ESPERANDO, e.getIdTipoVehiculo(), e.getFechaRegistro(), e.getIdEspera()) + 1;
         }
         Bahia b = e.getIdBahiaOfrecida() == null ? null : bahias.findById(e.getIdBahiaOfrecida()).orElse(null);
         return new EsperaDto(e.getIdEspera(), e.getEstadoEspera(), e.getIdVehiculo(), e.getIdTipoVehiculo(), posicion,

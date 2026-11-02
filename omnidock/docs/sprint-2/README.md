@@ -18,7 +18,7 @@ Las tareas del sprint y sus 21 subtareas quedaron terminadas en Jira. Burndown: 
 
 ## Pruebas
 
-El 02/10 probamos la API contra el backend real y la base en la nube: **92 casos, pasan 91**. El que falló fue DEF-03 (un usuario bloqueado podía seguir usando su token). El detalle está en `../qa/evidencias_api.md`, y las capturas de cada endpoint en el PDF de Felipe.
+El 02/10 probamos la API contra el backend real y la base en la nube. En la primera pasada fallaron 7 casos por DEF-01; después de corregir la base los repetimos: **92 casos, pasan 91**. El que siguió fallando fue DEF-03 (un usuario bloqueado podía seguir usando su token). El detalle está en `../qa/evidencias_api.md`, y las capturas de cada endpoint en el PDF de Felipe.
 
 En la base quedaron activas las seis restricciones CHECK y las ocho vistas para Power BI (`check_consultas.png` y `consulta_bi_vistas.png`).
 

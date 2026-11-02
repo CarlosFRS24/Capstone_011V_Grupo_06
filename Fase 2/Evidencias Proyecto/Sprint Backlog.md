@@ -1,6 +1,6 @@
 # Sprint Backlog
 
-Sprints de dos semanas. Resumen de las tareas de cada sprint según Jira al 17/10/2026. El detalle de cada uno está en `omnidock/docs/sprint-N/README.md`.
+Sprints de dos semanas. Resumen de las tareas de cada sprint según la exportación final de Jira (01/11/2026). El detalle de cada uno está en `omnidock/docs/sprint-N/README.md`.
 
 Partimos en cascada (kick-off del 21/08) y el 09/09 cambiamos a ágil. Ese primer periodo quedó como Sprint 0.
 
@@ -34,7 +34,7 @@ Partimos en cascada (kick-off del 21/08) y el 09/09 cambiamos a ágil. Ese prime
 | KAN-73 DAS | Crisler Romero | Terminada |
 | KAN-75 Diagramas UML | Crisler Romero | Terminada |
 
-Pruebas: pasan 91 de 92 casos de la API (ver `../sprint-2/README.md`).
+Pruebas: pasan 91 de 92 casos de la API (ver `../../omnidock/docs/sprint-2/README.md`).
 
 ## Sprint 3 — App, panel web e integración (05/10 al 18/10) · terminado
 
@@ -50,14 +50,37 @@ Pruebas: pasan 91 de 92 casos de la API (ver `../sprint-2/README.md`).
 | KAN-80 Limpieza de datos de prueba | Crisler Romero | Terminada |
 | KAN-81 Conexión de Power BI a Oracle | Crisler Romero | Terminada |
 
-Pruebas: 26 de 26 OK (ver `../sprint-3/pruebas.md`).
+Pruebas: 26 de 26 OK (ver `../../omnidock/docs/sprint-3/pruebas.md`).
 
-## Sprint 4 — Power BI, pruebas finales y cierre (19/10 al 01/11) · planificado
+## Sprint 4 — Cambios de la presentación, Power BI y cierre (19/10 al 01/11) · terminado
 
 | Tarea | Responsable | Estado |
 | --- | --- | --- |
-| KAN-27 Datos hacia Power BI | Crisler Romero | Por hacer |
-| KAN-72 HU-05 Pipeline de datos | Crisler Romero | Por hacer |
-| KAN-40 HU-11 Dashboards en el panel web | Crisler Romero | Por hacer |
-| KAN-28 Pruebas de integración | Felipe Vidal | Por hacer |
-| KAN-29 Empaquetado del prototipo | Carlos Román | Por hacer |
+| KAN-27 Datos hacia Power BI | Crisler Romero | Terminada: panel en Power BI Desktop (`docs/sprint-4/Omnidock.pbix`) |
+| KAN-72 HU-05 Pipeline de datos | Crisler Romero | Terminada |
+| KAN-40 HU-11 Dashboards en el panel web | Crisler Romero | Cerrada: se reemplazó por gráficos propios (CC-24) |
+| KAN-28 Pruebas de integración | Felipe Vidal | Terminada: regresión 115 de 115 y prueba de carga |
+| KAN-29 Empaquetado del prototipo | Carlos Román | Terminada: jar, build web y APK |
+
+Agregado después de la presentación del 23/10 (en Jira desde el 30/10, dentro de la épica KAN-26):
+
+| Tarea | Responsable | Estado |
+| --- | --- | --- |
+| KAN-90 HU-12 Lista de espera | Carlos Román | Terminada |
+| KAN-91 HU-13 Control de inasistencias | Carlos Román | Terminada |
+| KAN-92 HU-14 Avisos en la app | Carlos Román | Terminada |
+| KAN-93 Ventana de reserva de 60 minutos y horario de la sede | Felipe Vidal | Terminada |
+| KAN-94 Tablas nuevas y 50 bahías | Crisler Romero | Terminada |
+| KAN-95 Regenerar datos históricos | Crisler Romero | Terminada |
+| KAN-96 Backend de faltas y desbloqueo | Felipe Vidal | Terminada |
+| KAN-97 Backend de lista de espera y avisos | Felipe Vidal | Terminada |
+| KAN-98 Pantallas de la app (lista de espera, faltas y avisos) | Carlos Román | Terminada |
+| KAN-99 Panel web (faltas y lista de espera) | Carlos Román | Terminada |
+| KAN-100 QR de las 50 bahías | Carlos Román | Terminada |
+| KAN-101 Gráficos de analítica en el panel | Crisler Romero | Terminada |
+| KAN-102 Actualizar diagramas UML | Crisler Romero | Terminada |
+| KAN-103 Actualizar ERS v1.4 | Carlos Román | Terminada |
+| KAN-104 Actualizar DAS v1.2 | Crisler Romero | Terminada |
+| KAN-105 Pruebas del Sprint 4 (22 casos en `Casos_Prueba_S4.xlsx` y regresión) | Felipe Vidal | Terminada: 22 de 22 OK |
+
+Pruebas: regresión de la API 115 de 115 OK y los 22 casos del sprint OK (ver `../../omnidock/docs/sprint-4/README.md`).

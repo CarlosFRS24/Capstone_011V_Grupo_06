@@ -8,20 +8,21 @@ Proyecto Capstone del **Equipo Nodalix** — Escuela de Informática y Telecomun
 
 Hoy los bicicleteros son estructuras de fierro en forma de U invertida, donde cada persona deja su bicicleta o scooter con su propio candado. Hace poco se agregó un control con el RUT y un código de barras en cada bicicleta, que registra la entrada y la salida, pero a la salida no siempre se revisa que la bicicleta sea de quien la saca. Además, no se sabe si hay espacio antes de llegar ni en qué lugar queda cada vehículo. OmniDock propone que cada rack se pueda reservar y abrir desde el celular, y que la institución vea cómo se usan los estacionamientos.
 
-- **App móvil:** el usuario entra con su cuenta institucional, registra su bicicleta o scooter, ve las bahías disponibles, reserva una (la reserva dura 15 minutos) y abre o cierra su sesión escaneando el código QR del rack.
-- **Panel web:** el administrador ve el estado de cada bahía (disponible, reservada, ocupada o fuera de servicio), gestiona usuarios y permisos, y maneja los tickets de mantención.
+- **App móvil:** el usuario entra con su cuenta institucional, registra su bicicleta o scooter, ve las bahías disponibles, reserva una (tiene 1 hora para llegar, dentro del horario de la sede) y abre o cierra su sesión escaneando el código QR del rack. Si no hay bahías libres para su vehículo se une a una lista de espera, y cada reserva a la que no llega le suma una falta: con 3 no puede reservar hasta que el administrador las anule. Los avisos le llegan a una campana en la app.
+- **Panel web:** el administrador ve el estado de cada bahía (disponible, reservada, ocupada o fuera de servicio), gestiona usuarios, permisos y faltas, maneja los tickets de mantención y ve la pantalla Analítica, con gráficos de uso calculados sobre las vistas BI.
 - **Simulador IoT:** como no tenemos el hardware real, un simulador hace de candado: recibe las órdenes de abrir y cerrar y envía el estado del rack.
-- **Power BI:** los datos de uso se muestran en tableros para ver ocupación, horas punta y fallas.
+- **Power BI:** un panel de tres páginas en Power BI Desktop muestra reservas, usos, horas punta, faltas, lista de espera, estado de las bahías y fallas.
 
-## Estado del proyecto (al 17/10/2026)
+## Estado del proyecto (al 01/11/2026)
 
 | Parte | Estado |
 | --- | --- |
-| Base de datos Oracle | Lista (Sprint 2) |
-| Backend y simulador IoT | Listos y probados (Sprint 2) |
-| Diseño de pantallas en Figma | Listo (Sprint 2) |
-| App móvil y panel web | Listos y probados con el backend (Sprint 3) |
-| Power BI | Conectado a la base (Sprint 3). El informe completo y el embebido son del Sprint 4 |
+| Base de datos Oracle | Lista (Sprint 2). En el Sprint 4 se agregaron faltas, lista de espera y avisos: 14 tablas, 50 bahías y 10 vistas para BI |
+| Backend y simulador IoT | Listos (Sprint 2). En el Sprint 4 se agregaron el horario de la sede, la reserva de 1 hora, las faltas, la lista de espera y los avisos |
+| Diseño de pantallas en Figma | Listo (Sprint 2). Las pantallas nuevas del Sprint 4 están como capturas en el anexo 5.5.3 del ERS |
+| App móvil y panel web | Listos (Sprint 3), con las pantallas nuevas y la Analítica del Sprint 4 |
+| Power BI | Panel terminado en Power BI Desktop (Sprint 4). El instituto no permite publicarlo ni embeberlo, así que el panel web muestra sus propios gráficos |
+| Pruebas | Regresión de la API 115 de 115 OK, prueba de carga y los 22 casos del Sprint 4 OK (`omnidock/docs/qa/` y `omnidock/docs/sprint-4/`) |
 
 ## Tecnologías
 
@@ -44,7 +45,7 @@ Hoy los bicicleteros son estructuras de fierro en forma de U invertida, donde ca
 | `omnidock/frontend/` | App móvil (Android) y panel web en Ionic |
 | `omnidock/database/` | Scripts de Oracle para crear la base, cargar datos de prueba y revisarlos |
 | `omnidock/docs/arquitectura/` | ERS, DAS y diagramas UML |
-| `omnidock/docs/sprint-0/` a `omnidock/docs/sprint-3/` | Un README por sprint: qué hicimos, quién, entregables, pruebas y retrospectiva |
+| `omnidock/docs/sprint-0/` a `omnidock/docs/sprint-4/` | Un README por sprint: qué hicimos, quién, entregables, pruebas y retrospectiva |
 | `omnidock/docs/gestion/` | Burndown y exportación de Jira |
 | `omnidock/docs/qa/` | Registro de las pruebas de la API y de la base |
 
@@ -70,16 +71,18 @@ Desde aquí, todas las rutas de esta guía parten en la carpeta `omnidock/`.
 
 Con el backend detenido, ejecutar los scripts en este orden:
 
-1. `database/00_drop.sql`: borra las 11 tablas y sus datos. Si alguna no existe, ese error se ignora.
-2. `database/01_ddl.sql`: crea las 11 tablas con sus restricciones.
-3. `database/02_insert.sql`: carga los catálogos y los datos de prueba (20 usuarios, 4 bahías, vehículos, reservas y usos). Siempre sobre tablas recién creadas.
+1. `database/00_drop.sql`: borra las 14 tablas, las 10 vistas y sus datos. Si alguna no existe, ese error se ignora.
+2. `database/01_ddl.sql`: crea las 14 tablas con sus restricciones.
+3. `database/02_insert.sql`: carga los catálogos y los datos de prueba (20 usuarios, 50 bahías en Acceso Norte y Patio Central, vehículos, reservas, usos, faltas y avisos). Siempre sobre tablas recién creadas.
 4. `database/03_verificar.sql`: consultas para revisar que todo quedó bien cargado.
 
 Para Power BI, aparte:
 
-5. `database/04_vistas_bi.sql`: crea las 8 vistas para los reportes. `00_drop.sql` no las borra.
-6. `database/05_consultas_bi.sql`: consultas de ejemplo sobre esas vistas (ocupación, horas punta, permanencia, reservas y mantención).
+5. `database/04_vistas_bi.sql`: crea las 10 vistas para los reportes (4 dimensiones y 6 hechos, incluidas faltas y lista de espera).
+6. `database/05_consultas_bi.sql`: consultas de ejemplo sobre esas vistas (ocupación, horas punta, permanencia, reservas, faltas, lista de espera y mantención).
 7. `database/06_datos_historicos.sql`: carga datos de ejemplo de tres meses (15/06 al 17/09/2026) para que los reportes tengan qué mostrar. Se ejecuta una sola vez, después del 02 y del 04.
+
+Orden completo para dejar la base lista: `00` → `01` → `02` → `03` → `04` → `06`.
 
 Para probar las restricciones de la base:
 
@@ -97,7 +100,7 @@ export DB_URL=jdbc:oracle:thin:@//localhost:1521/XEPDB1
 export DB_USER=<usuario> DB_PASSWORD=<clave>
 ```
 
-También se puede editar `backend/src/main/resources/application.yml`. Son opcionales `JWT_SECRET`, `RESERVA_MINUTOS` (15 por defecto) y las variables `PBI_*` de Power BI.
+También se puede editar `backend/src/main/resources/application.yml`. Son opcionales `JWT_SECRET`, `RESERVA_MINUTOS` (60 por defecto; con `2` se puede ver una falta sin esperar), `HORARIO_ACTIVO` (`false` permite reservar a cualquier hora, para probar o presentar) y las variables `PBI_*` de Power BI.
 
 ### 4. Levantar el backend
 
@@ -129,9 +132,11 @@ npm start          # http://localhost:8100
 - El administrador entra al panel web (`/admin`) y el usuario final a la app (`/app`).
 - En el navegador el check-in permite escribir el código del rack (por ejemplo `RACK-BICI-01`). En el celular se escanea el QR; hay QR de prueba en `frontend/qr-prueba/`.
 
-### 7. Power BI (Sprint 4)
+### 7. Power BI
 
-La forma simple es publicar el reporte y definir la variable `PBI_EMBED_URL`; el backend la entrega en `GET /api/v1/analitica/embed-token`. La forma completa usa `PBI_MODO=embedded` con las credenciales de la aplicación registrada en Microsoft Entra ID (`PBI_TENANT_ID`, `PBI_CLIENT_ID`, `PBI_CLIENT_SECRET`, `PBI_WORKSPACE_ID` y `PBI_REPORT_ID`).
+El panel está en `docs/sprint-4/Omnidock.pbix` y se abre con Power BI Desktop. Se conecta a la base Oracle con el mismo wallet del backend y usa las 10 vistas de `04_vistas_bi.sql`. Si después de cambiar las vistas no aparecen las nuevas, hay que borrar la caché de Power BI (*Archivo → Opciones y configuración → Opciones → Carga de datos → Borrar caché*).
+
+El panel web no depende de Power BI: la pantalla Analítica calcula sus gráficos con las mismas vistas. Embeber el informe queda opcional, porque el instituto no permite publicarlo. Si se pudiera, basta con definir `PBI_EMBED_URL` (o `PBI_MODO=embedded` con las variables `PBI_*` de una aplicación de Microsoft Entra ID).
 
 ## Integrantes
 
@@ -143,7 +148,7 @@ La forma simple es publicar el reporte y definir la variable `PBI_EMBED_URL`; el
 
 ## Cómo trabajamos
 
-Partimos en cascada y el 09/09/2026 cambiamos a metodología ágil. Trabajamos en sprints de dos semanas y llevamos las tareas en Jira. Las 11 historias de usuario están en el ERS (anexo 5.4).
+Partimos en cascada y el 09/09/2026 cambiamos a metodología ágil. Trabajamos en sprints de dos semanas y llevamos las tareas en Jira. Las 14 historias de usuario están en el ERS (anexo 5.4); las HU-12 a HU-14 se agregaron en el Sprint 4.
 
 | Sprint | Fechas | De qué se trata |
 | --- | --- | --- |

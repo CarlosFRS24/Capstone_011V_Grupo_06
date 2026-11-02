@@ -14,7 +14,7 @@ Hacer la app y el panel web siguiendo el diseño de Figma y dejarlos funcionando
 | Felipe Vidal | Integró la app y el panel con el backend y la base de datos. Cerró las historias de login, asignación por vehículo e IoT | KAN-18, KAN-68 a KAN-70 |
 | Crisler Romero | Cargó datos históricos de ejemplo, probó las consultas para Power BI y las restricciones de la base, limpió los datos de prueba y conectó Power BI a Oracle Cloud. Corrigió DEF-03 y DEF-04 en el backend | KAN-77 a KAN-81 |
 
-Las 15 tareas e historias del sprint y las 7 subtareas quedaron en Finalizado (exportación de Jira del 17/10: `../gestion/jira/nodalix_2026-10-17_06.41pm.csv`).
+Las 15 tareas e historias del sprint y las 7 subtareas quedaron en Finalizado (exportación final de Jira: `../gestion/jira/nodalix_2026-11-01_09.36pm.csv`).
 
 ## Burndown
 
@@ -24,7 +24,7 @@ Contamos 21 ítems: las 7 subtareas de las pantallas y las 14 tareas e historias
 
 | Entregable | Dónde está |
 | --- | --- |
-| App móvil y panel web | `../../frontend/` (el código final lo sube Carlos al repositorio) |
+| App móvil y panel web | `../../frontend/` |
 | Pruebas del sprint (26 casos) | `Casos_Prueba_S3.xlsx` |
 | Capturas de cada prueba | `Evidencias_QA_S3.docx` |
 | Pruebas automáticas de la API | `../qa/regresion_api_2026-10-11_2309.md` y `../qa/regresion_api_2026-10-14_1658.md` |

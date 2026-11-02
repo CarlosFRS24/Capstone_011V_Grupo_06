@@ -22,7 +22,7 @@ export class EstadoService {
 
   readonly estado = signal<MiEstado | null>(null);
   private timer?: ReturnType<typeof setInterval>;
-  private ofertaAvisada?: number;   // idEspera de la última oferta que ya mostramos
+  private ofertaAvisada?: string;   // idEspera + fecha límite de la última oferta mostrada (una nueva oferta a la misma inscripción vuelve a avisar, DEF-11)
 
   iniciar() {
     if (this.timer) return;
@@ -47,8 +47,9 @@ export class EstadoService {
       next: (e) => {
         this.estado.set(e);
         const esp = e.espera;
-        if (esp?.estadoEspera === 'OFRECIDA' && this.ofertaAvisada !== esp.idEspera) {
-          this.ofertaAvisada = esp.idEspera;
+        const clave = esp ? `${esp.idEspera}|${esp.fechaLimiteOferta}` : undefined;
+        if (esp?.estadoEspera === 'OFRECIDA' && this.ofertaAvisada !== clave) {
+          this.ofertaAvisada = clave;
           this.avisarOferta(esp.codigoIot ?? '', esp.fechaLimiteOferta);
         }
       },
